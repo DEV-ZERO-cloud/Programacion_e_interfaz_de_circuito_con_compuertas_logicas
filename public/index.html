@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Booleano</title>
+<link rel="stylesheet" href="../src/styles/styles.css">
+</head>
+
+<body>
+
+<!-- IZQUIERDA -->
+<div class="sidebar-left">
+  <h3>Utilidades</h3>
+  <div class="cable-item">
+    <img src="../src/assets/cable.png" alt="Cable">
+    Cable
+  </div>
+</div>
+
+<!-- CENTRO -->
+<div class="workspace-container">
+  <div class="workspace" id="workspace"></div>
+</div>
+
+<!-- DERECHA -->
+<div class="sidebar-right">
+  <div>
+    <h4>Configuración Inicial</h4>
+    <label>Cantidad de Niveles (1-20)</label>
+    <input type="number" id="levelInput" min="1" max="20" placeholder="Máx 20">
+    <div class="error" id="errorMsg"></div>
+    <button id="generateBtn">Confirmar</button>
+  </div>
+
+  <!-- CONTROL ON/OFF -->
+  <div class="switch-container">
+    <h4>Estado del Circuito</h4>
+    <label class="switch">
+      <input type="checkbox" id="circuitSwitch">
+      <span class="slider"></span>
+    </label>
+    <div id="statusText" class="status-text status-off">Circuito Apagado</div>
+  </div>
+
+</div>
+
+<script>
+const workspace = document.getElementById("workspace");
+const input = document.getElementById("levelInput");
+const errorMsg = document.getElementById("errorMsg");
+const button = document.getElementById("generateBtn");
+const circuitSwitch = document.getElementById("circuitSwitch");
+const statusText = document.getElementById("statusText");
+
+let circuitRunning = false;
+
+button.addEventListener("click", generateLevels);
+
+function generateLevels(){
+  if(circuitRunning){
+    alert("No puedes modificar niveles mientras el circuito está encendido.");
+    return;
+  }
+
+  const count = Number(input.value);
+
+  if(!Number.isInteger(count) || count < 1 || count > 20){
+    errorMsg.textContent = "Ingrese un número entre 1 y 20.";
+    return;
+  }
+
+  errorMsg.textContent = "";
+  workspace.textContent = "";
+
+  const fragment = document.createDocumentFragment();
+
+  for(let i=1;i<=count;i++){
+    const level = document.createElement("div");
+    level.className="level";
+
+    const title = document.createElement("div");
+    title.className="level-title";
+    title.textContent="Nivel "+i;
+
+    const select = document.createElement("select");
+    ["AND","OR","NOT","XOR","NAND","NOR"].forEach(op=>{
+      const option=document.createElement("option");
+      option.value=op;
+      option.textContent=op;
+      select.appendChild(option);
+    });
+
+    level.appendChild(title);
+    level.appendChild(select);
+    fragment.appendChild(level);
+  }
+
+  workspace.appendChild(fragment);
+}
+
+/* CONTROLADOR ON/OFF */
+circuitSwitch.addEventListener("change", function(){
+  circuitRunning = this.checked;
+
+  if(circuitRunning){
+    statusText.textContent = "Circuito Encendido";
+    statusText.classList.remove("status-off");
+    statusText.classList.add("status-on");
+    input.disabled = true;
+    button.disabled = true;
+
+    console.log("Circuito iniciado");
+    // Aquí luego puedes llamar la función que evalúe el circuito
+  } else {
+    statusText.textContent = "Circuito Apagado";
+    statusText.classList.remove("status-on");
+    statusText.classList.add("status-off");
+    input.disabled = false;
+    button.disabled = false;
+
+    console.log("Circuito detenido");
+  }
+});
+</script>
+
+</body>
+</html>
