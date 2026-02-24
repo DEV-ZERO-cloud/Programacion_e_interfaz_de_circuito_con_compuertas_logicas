@@ -1,111 +1,483 @@
+﻿/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
-body{display:flex;height:100vh;overflow:hidden;background:#eef1f5}
 
-/* LAYOUT */
-.sidebar-left,.sidebar-right{background:#fff;padding:20px}
-.sidebar-left{width:220px;border-right:1px solid #ddd}
-.sidebar-right{width:300px;border-left:1px solid #ddd}
-.workspace-container{flex:1;overflow-x:auto;background:#fafafa}
+/* BODY */
+body{display:flex;height:100vh;overflow:hidden;background:#0d0f1a;color:#c9d1e0}
 
-/* GRID */
+/* SIDEBARS */
+.sidebar-left,.sidebar-right{background:#131626;padding:14px 12px;display:flex;flex-direction:column;gap:10px;border-color:#1e2340;flex-shrink:0}
+.sidebar-left{width:190px;border-right:1px solid #1e2340;overflow-y:auto}
+.sidebar-right{width:270px;border-left:1px solid #1e2340;overflow-y:auto}
+.sidebar-left h3,.sidebar-right h4{color:#7c8cbc;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+
+/* WORKSPACE */
+.workspace-container{flex:1;overflow:auto;background:#0d0f1a;position:relative}
 .workspace{
-  display:flex;
-  min-height:100%;
-  min-width:max-content;
-  background-image:
-    linear-gradient(to right,#ddd 1px,transparent 1px),
-    linear-gradient(to bottom,#ddd 1px,transparent 1px);
-  background-size:25px 25px;
-}
-
-/* LEVEL */
-.level{
-  min-width:260px;
-  padding:15px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  border-right:1px solid rgba(0,0,0,.08);
-}
-.level-title{font-weight:600;margin-bottom:8px;color:#555}
-
-/* FORM */
-select,input{
-  width:100%;
-  padding:6px;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-button{
-  width:100%;
-  padding:8px;
-  border:none;
-  border-radius:6px;
-  background:#4c7dff;
-  color:#fff;
-  cursor:pointer;
-}
-button:hover{background:#345de0}
-.error{color:red;font-size:13px;min-height:18px;margin:6px 0}
-
-/* TOOLBOX */
-.cable-item{
-  display:flex;align-items:center;gap:8px;
-  padding:8px;margin-bottom:8px;
-  border-radius:6px;background:#f4f6f9;
-}
-.cable-item img{width:18px;height:18px}
-
-/* SWITCH ON/OFF */
-.switch-container{
-  margin-top:20px;
-}
-
-.switch{
+  display:flex;flex-direction:row;align-items:flex-start;
+  min-height:100%;min-width:max-content;
+  padding:24px 20px;gap:0;
   position:relative;
-  display:inline-block;
-  width:60px;
-  height:30px;
+  background-image:linear-gradient(to right,#161929 1px,transparent 1px),linear-gradient(to bottom,#161929 1px,transparent 1px);
+  background-size:28px 28px;
 }
 
-.switch input{
-  opacity:0;
-  width:0;
-  height:0;
+/* SVG cable overlay */
+#cable-overlay{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;overflow:visible;
+}
+#cable-overlay.drawing-mode{pointer-events:all;cursor:crosshair}
+#cable-overlay path,#cable-overlay line{pointer-events:stroke}
+
+/* COLUMN */
+.level-col,.input-col{
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:8px 10px;
+  flex-shrink:0;
+  position:relative;
+}
+.input-col{
+  min-width:110px;background:rgba(16,19,31,0.35);
+  border:1px dashed #2a2f5088;border-radius:8px;
+  margin-right:0;
+}
+.level-col{
+  min-width:190px;
+  border:2px solid var(--lc,#1e2340);
+  border-radius:8px;
+  margin-left:6px;
+}
+/* Per-level border+title colors */
+.level-col[data-level="1"]{--lc:#eab308}
+.level-col[data-level="2"]{--lc:#22c55e}
+.level-col[data-level="3"]{--lc:#3b82f6}
+.level-col[data-level="4"]{--lc:#ef4444}
+.level-col[data-level="5"]{--lc:#f97316}
+.level-col[data-level="6"]{--lc:#8b5cf6}
+.level-col .col-label{border-color:var(--lc,#252a45)!important}
+.level-col .col-title{color:var(--lc,#a0aec9)!important}
+.level-col .col-formula{color:var(--lc,#4ade80)!important;opacity:.85}
+
+/* Column connector: FF drop zone between two level columns */
+.col-connector{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  align-self:stretch;          /* match column height */
+  width:90px;flex-shrink:0;
+  margin:0 2px;
+  border:1px dashed #1e2340;
+  border-radius:7px;
+  position:relative;
+  cursor:default;
+  transition:border-color .18s,background .18s;
+}
+/* Faint "+FF" hint when empty */
+.col-connector::before{
+  content:"+ FF";
+  font-size:9px;color:#1e2340;
+  letter-spacing:.05em;user-select:none;
+  transition:color .15s;
+  font-family:"Courier New",monospace;
+  pointer-events:none;
+}
+.col-connector.drag-active{
+  border-color:#7c3aed;
+  background:#1b124222;
+}
+.col-connector.drag-active::before{color:#7c3aed}
+.col-connector.filled::before{display:none}
+/* Compact FF card inside a connector */
+.conn-ff-card{
+  display:flex;flex-direction:row;
+  align-items:center;gap:5px;
+  padding:6px 7px;
+  background:#130d2a;
+  border:1px solid #5b21b6;
+  border-radius:6px;
+  position:relative;
+  cursor:default;
+}
+.conn-ff-label{
+  font-size:9px;font-weight:700;
+  color:#a78bfa;font-family:"Courier New",monospace;
+  background:#1b1242;border:1px solid #5b21b6;
+  border-radius:3px;padding:2px 5px;
+  white-space:nowrap;
+}
+.conn-ff-ports{
+  display:flex;flex-direction:column;gap:5px;align-items:center;
+}
+.conn-ff-remove{
+  position:absolute;top:-7px;right:-7px;
+  width:14px;height:14px;border-radius:50%;
+  background:#7c3aed;color:#fff;border:none;
+  font-size:9px;line-height:14px;text-align:center;
+  cursor:pointer;padding:0;z-index:20;
+  box-shadow:0 0 4px #7c3aed99;
+}
+.conn-ff-remove:hover{background:#a78bfa}
+
+/* Column header */
+.col-label{
+  width:100%;text-align:center;
+  background:#1a1d30;border:1px solid #252a45;border-radius:7px;
+  padding:6px 8px;margin-bottom:8px;
+}
+.col-label .col-title{font-weight:700;font-size:12px;color:#a0aec9}
+.col-label .col-formula{font-size:10px;color:#4ade80;font-family:"Courier New",monospace;margin-top:2px}
+.col-label select{
+  margin-top:5px;width:100%;padding:3px 5px;
+  background:#0d0f1a;color:#c9d1e0;
+  border:1px solid #2a2f50;border-radius:5px;
+  font-size:11px;cursor:pointer;
+}
+.col-label select:focus{outline:none;border-color:#4c7dff}
+
+/* GATE CARD */
+.gate-card{
+  position:relative;
+  display:flex;align-items:center;
+  margin:0;
 }
 
-.slider{
+/* PORT DOTS */
+.port{
+  width:10px;height:10px;border-radius:50%;
+  border:2px solid #3d4466;background:#0d0f1a;
+  cursor:pointer;flex-shrink:0;
+  transition:border-color .15s,background .15s,box-shadow .15s;
+  position:relative;z-index:10;
+}
+.port:hover{border-color:#4c7dff;background:#0d1133;box-shadow:0 0 6px #4c7dff88}
+.port.connected{border-color:#4ade80;background:#14532d}
+.port.active-port{border-color:#facc15;background:#713f12;box-shadow:0 0 8px #facc1599;animation:pulse-port .7s infinite}
+.port.pending{border-color:#f97316;background:#431407;box-shadow:0 0 10px #f9731688}
+
+@keyframes pulse-port{0%,100%{box-shadow:0 0 6px #facc1590}50%{box-shadow:0 0 14px #facc15cc}}
+
+.port-in-wrap{display:flex;flex-direction:column;gap:8px;align-items:center;margin-right:0}
+.port-out-wrap{display:flex;align-items:center;margin-left:0}
+
+/* port labels */
+.port-label{font-size:8px;color:#4a5270;position:absolute;pointer-events:none}
+
+/* SVG gate body */
+.gate-svg-wrap svg{display:block}
+
+/* OUTPUT BADGE */
+.output-badge{
+  width:24px;height:24px;border-radius:50%;
+  border:1px solid #2a2f50;background:#0d0f1a;
+  color:#4a5270;font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  margin-left:4px;transition:all .2s;flex-shrink:0;
+}
+.output-badge.on{background:#14532d;border-color:#4ade80;color:#4ade80;box-shadow:0 0 7px #4ade8077}
+.output-badge.off{background:#3b0e0e;border-color:#ef4444;color:#ef4444;box-shadow:0 0 5px #ef444455}
+/* FF output badge variants */
+.output-badge.ff-badge{width:32px;height:24px;border-radius:6px;font-size:8px;letter-spacing:.02em}
+.output-badge.ff-on{background:#3b0764;border-color:#a78bfa;color:#a78bfa;box-shadow:0 0 8px #a78bfa88}
+.output-badge.ff-off{background:#1b1242;border-color:#5b21b6;color:#7c3aed}
+
+/* INPUT NODE (far-left column) */
+.input-node{
+  display:flex;align-items:center;gap:0;
+  /* vertical position handled inline by JS */
+}
+.input-bit-label{
+  font-size:9px;font-family:"Courier New",monospace;
+  color:#4a5270;width:20px;text-align:right;
+  margin-right:4px;flex-shrink:0;user-select:none;
+}
+.input-toggle{
+  width:34px;height:26px;border-radius:5px;
+  border:1px solid #2a2f50;background:#0d0f1a;
+  color:#6b7280;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;user-select:none;transition:all .15s;
+  flex-shrink:0;
+}
+.input-toggle.on{background:#14532d;border-color:#4ade80;color:#4ade80;box-shadow:0 0 5px #4ade8055}
+/* Short stub wire between toggle and port dot */
+.input-wire-stub{
+  width:12px;height:2px;
+  background:#2a3050;flex-shrink:0;
+}
+.input-wire-stub.on{background:#4ade8088}
+
+/* CABLE */
+.cable-path{
+  fill:none;stroke:#3d4466;stroke-width:2;stroke-linecap:round;
+  transition:stroke .2s,filter .2s;cursor:pointer;pointer-events:stroke;
+}
+.cable-path.active{stroke:#4ade80;filter:drop-shadow(0 0 3px #4ade80)}
+.cable-path.zero{stroke:#ef4444;filter:drop-shadow(0 0 3px #ef444488)}
+.cable-path.temp{stroke:#f97316;stroke-dasharray:6 4;stroke-width:1.5;pointer-events:none}
+.cable-path:hover{stroke:#e2a024;filter:drop-shadow(0 0 2px #e2a02488)}
+.cable-path.cable-selected{stroke:#f97316;stroke-width:3;filter:drop-shadow(0 0 5px #f9731699)}
+/* Invisible wide hit area for easy cable clicking */
+.cable-hit{fill:none;stroke:transparent;stroke-width:18;cursor:pointer;pointer-events:stroke}
+
+/* Cable tooltip */
+#cable-tooltip{
+  position:fixed;z-index:2000;
+  background:#1c1f35;border:1px solid #f97316;border-radius:8px;
+  padding:6px 10px;display:flex;flex-direction:column;gap:5px;
+  box-shadow:0 6px 20px rgba(0,0,0,.6);
+  font-size:10px;color:#94a3b8;
+}
+#cable-tooltip .tooltip-label{font-size:10px;color:#64748b;text-align:center}
+#cable-tooltip .tooltip-btn{
+  background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b;
+  border-radius:5px;padding:4px 12px;font-size:11px;font-weight:700;
+  cursor:pointer;transition:background .15s;
+}
+#cable-tooltip .tooltip-btn:hover{background:#991b1b}
+
+/* FORMS */
+input[type="number"]{width:100%;padding:7px 10px;background:#0d0f1a;color:#c9d1e0;border:1px solid #2a2f50;border-radius:7px;font-size:13px}
+input[type="number"]:focus{outline:none;border-color:#4c7dff}
+input:disabled{opacity:.4;cursor:not-allowed}
+
+.btn{width:100%;padding:8px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:5px}
+.btn-primary{background:#3b5bdb;color:#fff}
+.btn-primary:hover{background:#4c6ef5}
+.btn-primary:disabled{background:#1e2340;color:#4a5270;cursor:not-allowed}
+.btn-warn{background:#854d0e;color:#fef3c7}
+.btn-warn:hover{background:#a16207}
+.btn-danger{background:#7f1d1d;color:#fff}
+.btn-danger:hover{background:#991b1b}
+
+.error{color:#f87171;font-size:11px;min-height:14px;margin:2px 0}
+
+/* GATE PALETTE */
+.gate-chip{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:6px;background:#0d0f1a;border:1px solid #1e2340;font-size:11px;color:#94a3b8;transition:border-color .15s,background .15s}
+.gate-chip:hover{border-color:#3b5bdb;background:#151929;color:#c9d1e0}
+.gate-chip svg{flex-shrink:0}
+.chip-label{font-weight:700;font-size:11px}
+.chip-desc{font-size:9px;color:#64748b;font-family:monospace}
+
+/* SWITCH */
+.switch-container{background:#0d0f1a;border:1px solid #1e2340;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.switch{position:relative;display:inline-block;width:52px;height:26px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#1e2340;transition:.3s;border-radius:26px;border:1px solid #2a2f50}
+.slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#4a5270;transition:.3s;border-radius:50%}
+input:checked + .slider{background:#14532d;border-color:#4ade80}
+input:checked + .slider:before{transform:translateX(26px);background:#4ade80}
+
+.status-badge{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.status-on{background:#14532d;color:#4ade80;border:1px solid #4ade80}
+.status-off{background:#1e2340;color:#64748b;border:1px solid #2a2f50}
+
+/* CLOCK */
+.clock-btn{background:#312e81;color:#a5b4fc;border:1px solid #4338ca;border-radius:7px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;width:100%;transition:background .2s,box-shadow .2s}
+.clock-btn:hover{background:#3730a3}
+.clock-btn:disabled{opacity:.4;cursor:not-allowed}
+.clock-btn.ff-active{animation:clock-pulse 1.8s ease-in-out infinite}
+@keyframes clock-pulse{0%,100%{box-shadow:0 0 0 0 #7c3aed55}50%{box-shadow:0 0 10px 4px #7c3aed88}}
+.clock-btn.ticked{background:#4c1d95;box-shadow:0 0 16px #a78bfacc;transition:all .15s}
+
+/* LEGEND */
+.legend{display:flex;flex-direction:column;gap:5px;font-size:10px;color:#64748b}
+.legend-row{display:flex;align-items:center;gap:6px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-dot.on{background:#4ade80;box-shadow:0 0 4px #4ade80}
+.legend-dot.off{background:#3d4466}
+.legend-dot.ff{background:#a78bfa;box-shadow:0 0 4px #a78bfa}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid #1e2340;margin:3px 0}
+
+/* HINT TEXT */
+.hint{font-size:10px;color:#4a5270;text-align:center}
+
+/* STATS */
+.stats-row{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;border-bottom:1px solid #1a1d2a}
+.stats-val{color:#4ade80;font-weight:700}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#0d0f1a}
+::-webkit-scrollbar-thumb{background:#2a2f50;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#3b4275}
+
+/* WORKSPACE PLACEHOLDER */
+#ws-placeholder{display:flex;align-items:center;justify-content:center;width:100%;min-height:calc(100vh - 40px);color:#1e2340;font-size:15px;letter-spacing:.05em;user-select:none;pointer-events:none}
+
+/* FF badge color */
+.ff-level .col-label{border-color:#5b21b6}
+.ff-level .col-label .col-formula{color:#a78bfa}
+
+/* ── Utility classes (replaces inline styles) ── */
+.section-label{font-size:9px;color:#4a5270;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.form-label{font-size:11px;color:#64748b;display:block;margin-bottom:3px}
+.sig-on{color:#4ade80}
+.hint-left{text-align:left;line-height:1.6;color:#3d4466}
+.hint{margin-top:4px}
+
+/* Gate card absolute-positioned children */
+.gate-svg-wrap{position:absolute;left:10px;top:0}
+.port-abs{position:absolute}
+
+/* Sidebar h4 spacing */
+.sidebar-right h4{margin-bottom:4px}
+
+/* JS-toggled visibility */
+.hidden{display:none!important}
+
+/* Cable hint error flash */
+.hint-error{color:#f87171!important}
+
+/* Gates area: fixed height set by JS; children are absolute-positioned */
+.gates-area{
+  position:relative;
+  width:100%;
+  /* height is set inline by JS */
+}
+
+/* Input column area uses flex space-evenly for inputs */
+.input-area{
+  display:flex;flex-direction:column;
+  justify-content:space-evenly;
+  width:100%;
+  /* height set inline by JS */
+}
+
+/* Per-gate wrapper (absolute inside gates-area) */
+.gate-wrap{
   position:absolute;
-  cursor:pointer;
-  top:0;left:0;right:0;bottom:0;
-  background-color:#ccc;
-  transition:.4s;
-  border-radius:30px;
+  display:flex;flex-direction:column;
+  align-items:flex-start;gap:2px;
+  /* left/top/transform set inline by JS */
 }
 
-.slider:before{
+/* Compact FF card inside a connector strip — schematic-style symbol */
+.conn-ff-card{
   position:absolute;
-  content:"";
-  height:22px;
-  width:22px;
-  left:4px;
-  bottom:4px;
-  background:white;
-  transition:.4s;
-  border-radius:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  display:flex;flex-direction:row;
+  align-items:stretch;
+  background:#0f0c1e;
+  border:1.5px solid #5b21b6;
+  border-radius:5px;
+  width:84px;
+  cursor:grab;
+  user-select:none;
+  box-shadow:0 2px 10px #3b006688;
+  z-index:10;
+}
+.conn-ff-card:active{cursor:grabbing}
+/* Left pin column */
+.cff-left{
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  padding:4px 0;
+  min-width:22px;
+}
+/* Right pin column */
+.cff-right{
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:4px 0;
+  min-width:20px;
+}
+/* Body center */
+.cff-body{
+  flex:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  border-left:1px solid #3b0066;
+  border-right:1px solid #3b0066;
+  padding:3px 2px;
+  gap:2px;
+}
+.cff-type-lbl{
+  font-size:8px;font-weight:700;
+  color:#a78bfa;font-family:"Courier New",monospace;
+  letter-spacing:.04em;white-space:nowrap;
+}
+.cff-q-val{
+  font-size:8px;font-weight:700;
+  color:#4a5270;font-family:"Courier New",monospace;
+  transition:color .15s;
+}
+.cff-q-val.ff-on-lbl{color:#4ade80}
+/* Individual pin row */
+.cff-pin{
+  display:flex;align-items:center;
+  height:16px;position:relative;
+}
+.cff-pin-left{ justify-content:flex-start;padding-left:2px;gap:3px; }
+.cff-pin-right{ justify-content:flex-end;padding-right:2px;gap:3px; }
+/* Pin label text */
+.cff-lbl{
+  font-size:7px;font-family:"Courier New",monospace;
+  color:#7c3aed;line-height:1;
+}
+.cff-lbl-q{ color:#4ade80 }
+/* Clock triangle */
+.cff-clk{
+  font-size:8px;color:#4a5270;line-height:1;
+  padding-left:3px;
+}
+/* Active-low bubble on R/K */
+.cff-bubble{
+  width:5px;height:5px;border-radius:50%;
+  border:1px solid #7c3aed;flex-shrink:0;
+  background:#0f0c1e;display:inline-block;
+}
+/* Remove button */
+.conn-ff-remove{
+  position:absolute;top:-7px;right:-7px;
+  width:14px;height:14px;border-radius:50%;
+  background:#7c3aed;color:#fff;border:none;
+  font-size:9px;line-height:14px;text-align:center;
+  cursor:pointer;padding:0;z-index:20;
+  box-shadow:0 0 4px #7c3aed99;
+}
+.conn-ff-remove:hover{background:#a78bfa}
+/* FF override indicator on gate-wrap */
+.gate-wrap.ff-override > .gate-card{
+  outline:1px dashed #7c3aed;
+  border-radius:4px;
 }
 
-input:checked + .slider{
-  background-color:#28c76f;
+/* Level-wide type selector (in level header) */
+.level-type-sel{
+  margin-top:5px;width:100%;padding:3px 5px;
+  background:#0d0f1a;color:#c9d1e0;
+  border:1px solid #2a2f50;border-radius:5px;
+  font-size:11px;cursor:pointer;
 }
+.level-type-sel:focus{outline:none;border-color:var(--lc,#4c7dff)}
 
-input:checked + .slider:before{
-  transform:translateX(30px);
+/* FF reset button (appears on FF-overridden gate wrap) */
+.ff-reset-btn{
+  position:absolute;top:-8px;right:-8px;z-index:20;
+  width:14px;height:14px;border-radius:50%;
+  background:#7c3aed;color:#fff;border:none;
+  font-size:9px;line-height:14px;text-align:center;
+  cursor:pointer;padding:0;display:none;
+  box-shadow:0 0 4px #7c3aed88;
 }
+.gate-wrap.ff-override .ff-reset-btn{display:block}
+.ff-reset-btn:hover{background:#a78bfa}
 
-.status-text{
-  margin-top:8px;
-  font-weight:600;
+/* Drag-and-drop: FF palette chip draggable style */
+.ff-drag-chip{
+  cursor:grab;user-select:none;
+  border:1px dashed #7c3aed!important;
+  transition:all .15s;
 }
-.status-on{color:#28c76f}
-.status-off{color:#888}
+.ff-drag-chip:active{cursor:grabbing;opacity:.7}
+.ff-drag-chip.dragging{opacity:.4;border-style:solid!important}
+
+/* Drop target highlight */
+.gate-card.drag-over{
+  outline:2px dashed #a78bfa;
+  background:#1b1242;
+  border-radius:4px;
+}

@@ -1,128 +1,1118 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador Booleano</title>
+<title>Simulador de Compuertas Logicas</title>
 <link rel="stylesheet" href="../src/styles/styles.css">
 </head>
-
 <body>
 
-<!-- IZQUIERDA -->
+<!-- LEFT SIDEBAR: gate reference palette -->
 <div class="sidebar-left">
-  <h3>Utilidades</h3>
-  <div class="cable-item">
-    <img src="../src/assets/cable.png" alt="Cable">
-    Cable
+  <h3>Referencia</h3>
+  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 H34 A16,16 0 0,1 34,38 H8 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><text x="21" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">AND</text></svg><div><div class="chip-label">AND</div><div class="chip-desc">A . B</div></div></div>
+  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 C22,6 38,6 44,22 C38,38 22,38 8,38 Q22,22 8,6 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><text x="24" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">OR</text></svg><div><div class="chip-label">OR</div><div class="chip-desc">A + B</div></div></div>
+  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 L50,22 L8,38 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><circle cx="55" cy="22" r="4" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><text x="24" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">NOT</text></svg><div><div class="chip-label">NOT</div><div class="chip-desc">A barra</div></div></div>
+  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M12,6 C26,6 40,6 46,22 C40,38 26,38 12,38 Q26,22 12,6 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><path d="M6,6 Q20,22 6,38" fill="none" stroke="#4c6ef5" stroke-width="1.6"/><text x="27" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">XOR</text></svg><div><div class="chip-label">XOR</div><div class="chip-desc">A xor B</div></div></div>
+  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 H32 A14,14 0 0,1 32,38 H8 Z" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><circle cx="50" cy="22" r="4" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><text x="20" y="26" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="monospace">NAND</text></svg><div><div class="chip-label">NAND</div><div class="chip-desc">not(A.B)</div></div></div>
+  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 C20,6 36,6 42,22 C36,38 20,38 8,38 Q20,22 8,6 Z" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><circle cx="46" cy="22" r="4" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><text x="23" y="26" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="monospace">NOR</text></svg><div><div class="chip-label">NOR</div><div class="chip-desc">not(A+B)</div></div></div>
+  <hr class="divider">
+  <div class="section-label">Flip-Flops <span style="color:#6d28d9;font-size:8px">(arrastra al circuito)</span></div>
+  <div class="gate-chip ff-drag-chip" draggable="true" data-ff-type="FFD"><svg width="44" height="28" viewBox="0 0 64 44"><rect x="8" y="4" width="46" height="36" rx="5" fill="#1b1242" stroke="#7c3aed" stroke-width="1.6"/><text x="31" y="18" fill="#a78bfa" font-size="9" text-anchor="middle" font-family="monospace" font-weight="700">FF-D</text><text x="13" y="30" fill="#6d28d9" font-size="7" font-family="monospace">D</text><text x="48" y="14" fill="#4ade80" font-size="7" text-anchor="end" font-family="monospace">Q</text></svg><div><div class="chip-label">FF-D</div><div class="chip-desc">Dato &mdash; arrastra</div></div></div>
+  <div class="gate-chip ff-drag-chip" draggable="true" data-ff-type="FFSR"><svg width="44" height="28" viewBox="0 0 64 44"><rect x="8" y="4" width="46" height="36" rx="5" fill="#1b1242" stroke="#7c3aed" stroke-width="1.6"/><text x="31" y="15" fill="#a78bfa" font-size="8" text-anchor="middle" font-family="monospace" font-weight="700">FF-SR</text><text x="13" y="26" fill="#6d28d9" font-size="7" font-family="monospace">S</text><text x="13" y="36" fill="#991b1b" font-size="7" font-family="monospace">R</text></svg><div><div class="chip-label">FF-SR</div><div class="chip-desc">Set/Reset &mdash; arrastra</div></div></div>
+  <div class="gate-chip ff-drag-chip" draggable="true" data-ff-type="FFJK"><svg width="44" height="28" viewBox="0 0 64 44"><rect x="8" y="4" width="46" height="36" rx="5" fill="#1b1242" stroke="#7c3aed" stroke-width="1.6"/><text x="31" y="15" fill="#a78bfa" font-size="8" text-anchor="middle" font-family="monospace" font-weight="700">FF-JK</text><text x="13" y="26" fill="#6d28d9" font-size="7" font-family="monospace">J</text><text x="13" y="36" fill="#991b1b" font-size="7" font-family="monospace">K</text></svg><div><div class="chip-label">FF-JK</div><div class="chip-desc">JK &mdash; arrastra</div></div></div>
+  <hr class="divider">
+  <div class="legend">
+    <div class="legend-row"><div class="legend-dot on"></div>Señal 1</div>
+    <div class="legend-row"><div class="legend-dot off"></div>Señal 0</div>
+    <div class="legend-row"><div class="legend-dot ff"></div>Salida FF</div>
+  </div>
+  <hr class="divider">
+  <div class="hint hint-left">
+    <b style="color:#94a3b8">Cables:</b> clic en salida &rarr; entrada.<br>
+    Clic cable = seleccionar; <b>Del</b> = borrar.<br>
+    <b style="color:#a78bfa">FF:</b> arrastra chip morado &rarr; suelta en la zona <b>entre dos columnas</b> para insertar el FF en ese canal.<br>
+    <span style="color:#7c3aed">×</span> en esquina = quitar FF.
   </div>
 </div>
 
-<!-- CENTRO -->
-<div class="workspace-container">
-  <div class="workspace" id="workspace"></div>
+<!-- WORKSPACE -->
+<div class="workspace-container" id="wsCont">
+  <div class="workspace" id="workspace">
+    <svg id="cable-overlay"></svg>
+    <div id="ws-placeholder">Configura y genera el circuito</div>
+  </div>
 </div>
 
-<!-- DERECHA -->
+<!-- CABLE TOOLTIP (fixed, shown on cable click) -->
+<div id="cable-tooltip" class="hidden">
+  <div class="tooltip-label">Cable seleccionado</div>
+  <button class="tooltip-btn" id="deleteCableBtn">✕ Borrar cable</button>
+</div>
+
+<!-- RIGHT SIDEBAR: controls -->
 <div class="sidebar-right">
+
   <div>
-    <h4>Configuración Inicial</h4>
-    <label>Cantidad de Niveles (1-20)</label>
-    <input type="number" id="levelInput" min="1" max="20" placeholder="Máx 20">
+    <h4>Configuracion</h4>
+    <label class="form-label">Niveles (1 a 6)</label>
+    <input type="number" id="levelInput" min="1" max="6" value="3">
     <div class="error" id="errorMsg"></div>
-    <button id="generateBtn">Confirmar</button>
+    <button class="btn btn-primary" id="generateBtn">Generar circuito</button>
+    <button class="btn btn-danger hidden" id="clearBtn">Limpiar todo</button>
   </div>
 
-  <!-- CONTROL ON/OFF -->
+  <hr class="divider">
+
   <div class="switch-container">
-    <h4>Estado del Circuito</h4>
+    <h4>Circuito</h4>
     <label class="switch">
-      <input type="checkbox" id="circuitSwitch">
+      <input type="checkbox" id="circuitSwitch" disabled>
       <span class="slider"></span>
     </label>
-    <div id="statusText" class="status-text status-off">Circuito Apagado</div>
+    <div id="statusBadge" class="status-badge status-off">APAGADO</div>
+    <p id="switchHint" class="hint">Genera el circuito primero</p>
+  </div>
+
+  <hr class="divider">
+
+  <div>
+    <h4>Clock (Flip-Flops)</h4>
+    <button class="clock-btn" id="clockBtn" disabled>Tick de Clock</button>
+    <p class="hint">Pulsa para latchear<br>los Flip-Flops activos</p>
+  </div>
+
+  <hr class="divider">
+
+  <div>
+    <h4>Cables</h4>
+    <button class="btn btn-warn hidden" id="clearCablesBtn">Eliminar todos los cables</button>
+    <p class="hint" id="cableHint">Haz clic para crear cables entre compuertas</p>
+  </div>
+
+  <hr class="divider">
+
+  <div id="circuitInfo" class="hidden">
+    <h4>Resumen</h4>
+    <div id="circuitStats"></div>
   </div>
 
 </div>
 
+<script src="../src/logic/compuerta_universal.js"></script>
+<script src="../src/logic/nivel.js"></script>
 <script>
-const workspace = document.getElementById("workspace");
-const input = document.getElementById("levelInput");
-const errorMsg = document.getElementById("errorMsg");
-const button = document.getElementById("generateBtn");
+// =========================================================
+//  GLOBALS
+// =========================================================
+const wsCont      = document.getElementById("wsCont");
+const workspace   = document.getElementById("workspace");
+const overlay     = document.getElementById("cable-overlay");
+const placeholder = document.getElementById("ws-placeholder");
+const levelInput  = document.getElementById("levelInput");
+const errorMsg    = document.getElementById("errorMsg");
+const generateBtn = document.getElementById("generateBtn");
+const clearBtn    = document.getElementById("clearBtn");
 const circuitSwitch = document.getElementById("circuitSwitch");
-const statusText = document.getElementById("statusText");
+const statusBadge   = document.getElementById("statusBadge");
+const switchHint    = document.getElementById("switchHint");
+const clockBtn      = document.getElementById("clockBtn");
+const clearCablesBtn = document.getElementById("clearCablesBtn");
+const cableHint   = document.getElementById("cableHint");
+const circuitInfo = document.getElementById("circuitInfo");
+const circuitStats = document.getElementById("circuitStats");
+const cableTooltip  = document.getElementById("cable-tooltip");
+const deleteCableBtn = document.getElementById("deleteCableBtn");
 
+const ALL_TYPES = ["AND","OR","NOT","XOR","NAND","NOR","FFD","FFSR","FFJK"];
+const COMBO_TYPES = ["AND","OR","NOT","XOR","NAND","NOR"]; // non-FF types for level selector
+const FF_TYPES    = ["FFD","FFSR","FFJK"];
+const MAX_LEVELS = 6;
+// GATE_W and GATE_H are defined in compuerta_universal.js
+
+let niveles     = [];   // Nivel objects (left to right, index 0 = most gates)
+let inputBits   = [];   // primary input bit values
+let cables      = [];   // {id,fromId,toId,pathEl,hitEl}
+let portMap     = new Map();
+let portValues  = new Map();
 let circuitRunning = false;
+let cableIdSeq  = 0;
+let areaH = 400; // shared gates-area height (px), set on buildCircuit
 
-button.addEventListener("click", generateLevels);
+// cable drawing state
+let drawingFrom  = null;
+let tempPath     = null;
+let selectedCableId = null;
+let draggedFFType = null; // FF type being dragged from palette
+let connFFs = new Map();  // connN → {tipo, compuerta, topPx}
+let draggedConnN = null;  // connN being repositioned (drag from card)
 
-function generateLevels(){
-  if(circuitRunning){
-    alert("No puedes modificar niveles mientras el circuito está encendido.");
+// =========================================================
+//  GENERATE
+// =========================================================
+generateBtn.addEventListener("click", () => {
+  if (circuitRunning) { alert("Apaga el circuito primero."); return; }
+  const N = Number(levelInput.value);
+  if (!Number.isInteger(N) || N < 1 || N > MAX_LEVELS) {
+    errorMsg.textContent = "Ingresa un numero entre 1 y " + MAX_LEVELS;
     return;
   }
-
-  const count = Number(input.value);
-
-  if(!Number.isInteger(count) || count < 1 || count > 20){
-    errorMsg.textContent = "Ingrese un número entre 1 y 20.";
-    return;
-  }
-
   errorMsg.textContent = "";
-  workspace.textContent = "";
+  buildCircuit(N);
+});
 
-  const fragment = document.createDocumentFragment();
+clearBtn.addEventListener("click", () => {
+  if (circuitRunning) { circuitSwitch.checked = false; setCircuitState(false); }
+  clearAll();
+});
 
-  for(let i=1;i<=count;i++){
-    const level = document.createElement("div");
-    level.className="level";
+clearCablesBtn.addEventListener("click", () => {
+  cables.forEach(c => {
+    if (c.pathEl && c.pathEl.parentNode) c.pathEl.parentNode.removeChild(c.pathEl);
+    if (c.hitEl  && c.hitEl.parentNode)  c.hitEl.parentNode.removeChild(c.hitEl);
+  });
+  cables = [];
+  portMap.forEach(p => { p.el.classList.remove("connected"); });
+  deselectCable();
+  updateCableHint();
+});
 
-    const title = document.createElement("div");
-    title.className="level-title";
-    title.textContent="Nivel "+i;
+function buildCircuit(N) {
+  clearAll(false);
+  niveles = [];
+  portMap.clear();
+  portValues.clear();
 
-    const select = document.createElement("select");
-    ["AND","OR","NOT","XOR","NAND","NOR"].forEach(op=>{
-      const option=document.createElement("option");
-      option.value=op;
-      option.textContent=op;
-      select.appendChild(option);
-    });
+  // Primary inputs: 2^N bits
+  const numInputs = Math.pow(2, N);
+  inputBits = new Array(numInputs).fill(0);
 
-    level.appendChild(title);
-    level.appendChild(select);
-    fragment.appendChild(level);
+  // Shared column height: all columns same px so pyramid centering works.
+  // Formula: space-evenly with (maxGates+1) slots → each slot = areaH/(maxGates+1)
+  // The gap between two adjacent gates = slot - GATE_H >= MIN_GAP_H
+  const MIN_GAP_H = 40;
+  const maxGates = Math.max(1, Math.pow(2, N - 1));
+  areaH = (maxGates + 1) * (GATE_H + MIN_GAP_H);
+
+  const frag = document.createDocumentFragment();
+
+  // INPUT COLUMN (far left)
+  frag.appendChild(buildInputColumn(N, numInputs));
+
+  // LEVEL COLUMNS
+  for (let i = 1; i <= N; i++) {
+    frag.appendChild(buildConnector(i));
+    const nivel = new Nivel(i, N, "AND");
+    niveles.push(nivel);
+    frag.appendChild(buildLevelColumn(nivel, i, N));
   }
 
-  workspace.appendChild(fragment);
+  placeholder.style.display = "none";
+  workspace.appendChild(frag);
+
+  // Init drag-and-drop on FF palette
+  initFFDragPalette();
+
+  circuitSwitch.disabled = false;
+  clockBtn.disabled = false;
+  clearBtn.classList.remove("hidden");
+  clearCablesBtn.classList.remove("hidden");
+  switchHint.style.display = "none";
+  circuitInfo.classList.remove("hidden");
+  updateStats();
+  updateClockActive();
+
+  requestAnimationFrame(resizeOverlay);
 }
 
-/* CONTROLADOR ON/OFF */
-circuitSwitch.addEventListener("change", function(){
-  circuitRunning = this.checked;
+// =========================================================
+//  CONNECTOR STRIP (FF drop zone between columns)
+// =========================================================
+function buildConnector(connN) {
+  const c = document.createElement("div");
+  c.className = "col-connector";
+  c.dataset.conn = connN;
 
-  if(circuitRunning){
-    statusText.textContent = "Circuito Encendido";
-    statusText.classList.remove("status-off");
-    statusText.classList.add("status-on");
-    input.disabled = true;
-    button.disabled = true;
+  // Restore existing FF at its stored Y position
+  if (connFFs.has(connN)) {
+    applyFFToConnector(connN, connFFs.get(connN).tipo, c, true, connFFs.get(connN).topPx);
+  }
 
-    console.log("Circuito iniciado");
-    // Aquí luego puedes llamar la función que evalúe el circuito
+  c.addEventListener("dragover", e => {
+    e.preventDefault();
+    // Allow both new FF drops and repositioning
+    if (!connFFs.has(connN) || draggedConnN === connN) {
+      c.classList.add("drag-active");
+    }
+  });
+  c.addEventListener("dragleave", () => c.classList.remove("drag-active"));
+  c.addEventListener("drop", e => {
+    e.preventDefault();
+    c.classList.remove("drag-active");
+    const rect   = c.getBoundingClientRect();
+    const rawY   = e.clientY - rect.top;
+    const topPx  = Math.min(Math.max(rawY, 20), c.offsetHeight - 20);
+
+    // Reposition existing FF on same connector
+    if (draggedConnN === connN && connFFs.has(connN)) {
+      const ff = connFFs.get(connN);
+      ff.topPx = topPx;
+      const card = c.querySelector(".conn-ff-card");
+      if (card) card.style.top = topPx + "px";
+      requestAnimationFrame(resizeOverlay);
+      return;
+    }
+
+    // New FF from palette
+    const ffType = e.dataTransfer.getData("ff-type") || draggedFFType;
+    if (!ffType) return;
+    if (circuitRunning) { alert("Apaga el circuito primero."); return; }
+    applyFFToConnector(connN, ffType, c, false, topPx);
+  });
+  return c;
+}
+
+function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
+  const pfx = "ffconn-" + connN;
+  // Remove old cables/ports
+  cables = cables.filter(c => {
+    if (c.fromId.startsWith(pfx) || c.toId.startsWith(pfx)) {
+      if (c.pathEl) c.pathEl.remove();
+      if (c.hitEl)  c.hitEl.remove();
+      return false;
+    }
+    return true;
+  });
+  [pfx+"-in", pfx+"-B", pfx+"-out"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
+
+  // Resolve Y position
+  if (skipMapUpdate && connFFs.has(connN)) {
+    topPx = connFFs.get(connN).topPx ?? (connEl.offsetHeight / 2 || 150);
   } else {
-    statusText.textContent = "Circuito Apagado";
-    statusText.classList.remove("status-on");
-    statusText.classList.add("status-off");
-    input.disabled = false;
-    button.disabled = false;
+    topPx = topPx ?? (connEl.offsetHeight / 2 || 150);
+    connFFs.set(connN, { tipo: ffType, compuerta: new Compuerta(ffType), topPx });
+  }
 
-    console.log("Circuito detenido");
+  // Clear old card
+  const oldCard = connEl.querySelector(".conn-ff-card");
+  if (oldCard) oldCard.remove();
+  connEl.classList.add("filled");
+
+  const def = GATE_DEFS[ffType] || GATE_DEFS.FFD;
+  const isTwoInput = def.inB_Y != null;
+
+  // ─── Build schematic-style card ─────────────
+  const card = document.createElement("div");
+  card.className = "conn-ff-card";
+  card.style.top = topPx + "px";
+  // Card height: 3-pin (SR/JK) = 66px, 1-pin (D) = 46px
+  const cardH = isTwoInput ? 66 : 46;
+  card.style.height = cardH + "px";
+  // Make the card itself draggable for repositioning
+  card.draggable = true;
+  card.addEventListener("dragstart", e => {
+    draggedConnN = connN;
+    e.dataTransfer.setData("conn-reposition", String(connN));
+    e.dataTransfer.effectAllowed = "move";
+    card.style.opacity = "0.5";
+  });
+  card.addEventListener("dragend", () => {
+    draggedConnN = null;
+    card.style.opacity = "";
+  });
+
+  // ── LEFT: input pin column
+  const leftCol = document.createElement("div");
+  leftCol.className = "cff-left";
+
+  // Top input pin (S / D / J)
+  const topLabel = ffType === "FFD" ? "D" : (ffType === "FFJK" ? "J" : "S");
+  const pinTop = _makePinRow(pfx + "-in", "in", connN, topLabel, false);
+  leftCol.appendChild(pinTop);
+
+  // Clock row (no port — driven by global clock button)
+  const clkRow = document.createElement("div");
+  clkRow.className = "cff-pin cff-pin-left";
+  clkRow.innerHTML = '<span class="cff-clk">▷</span><span class="cff-lbl" style="color:#3d4466">C</span>';
+  leftCol.appendChild(clkRow);
+
+  // Bottom input pin (R / K) — only for 2-input FFs
+  if (isTwoInput) {
+    const botLabel = ffType === "FFJK" ? "K" : "R";
+    const pinBot = _makePinRow(pfx + "-B", "in", connN, botLabel, true);
+    leftCol.appendChild(pinBot);
+  }
+  card.appendChild(leftCol);
+
+  // ── BODY
+  const body = document.createElement("div");
+  body.className = "cff-body";
+  const typeLbl = document.createElement("span");
+  typeLbl.className = "cff-type-lbl";
+  typeLbl.textContent = ffType.replace("FF","FF-");
+  body.appendChild(typeLbl);
+  const qVal = document.createElement("span");
+  qVal.className = "cff-q-val";
+  qVal.textContent = "Q:?";
+  body.appendChild(qVal);
+  card.appendChild(body);
+
+  // ── RIGHT: Q output pin
+  const rightCol = document.createElement("div");
+  rightCol.className = "cff-right";
+  const pinQ = document.createElement("div");
+  pinQ.className = "cff-pin cff-pin-right";
+  const qLbl = document.createElement("span");
+  qLbl.className = "cff-lbl cff-lbl-q";
+  qLbl.textContent = "Q";
+  const dotOut = makeDot(pfx + "-out", "out", connN, -2, "out");
+  dotOut.title = ffType + " Q salida";
+  pinQ.appendChild(qLbl);
+  pinQ.appendChild(dotOut);
+  rightCol.appendChild(pinQ);
+  card.appendChild(rightCol);
+
+  // ── Remove × button
+  const rmBtn = document.createElement("button");
+  rmBtn.className = "conn-ff-remove";
+  rmBtn.textContent = "\u00d7";
+  rmBtn.title = "Quitar FF";
+  rmBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    if (circuitRunning) return;
+    removeFFFromConnector(connN, connEl);
+  });
+  card.appendChild(rmBtn);
+
+  connEl.appendChild(card);
+  updateClockActive();
+  updateStats();
+  requestAnimationFrame(resizeOverlay);
+}
+
+// Build a single pin row for the left side of an FF card
+function _makePinRow(portId, portType, connN, label, hasBubble) {
+  const row = document.createElement("div");
+  row.className = "cff-pin cff-pin-left";
+  const dot = makeDot(portId, portType, connN, -2, portType === "out" ? "out" : "A");
+  dot.title = label + " — " + portId;
+  const lbl = document.createElement("span");
+  lbl.className = "cff-lbl";
+  lbl.textContent = label;
+  row.appendChild(dot);
+  row.appendChild(lbl);
+  if (hasBubble) {
+    const b = document.createElement("span");
+    b.className = "cff-bubble";
+    row.appendChild(b);
+  }
+  return row;
+}
+
+function removeFFFromConnector(connN, connEl) {
+  const pfx = "ffconn-" + connN;
+  cables = cables.filter(c => {
+    if (c.fromId.startsWith(pfx) || c.toId.startsWith(pfx)) {
+      if (c.pathEl) c.pathEl.remove();
+      if (c.hitEl)  c.hitEl.remove();
+      return false;
+    }
+    return true;
+  });
+  [pfx+"-in", pfx+"-B", pfx+"-out"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
+  connFFs.delete(connN);
+  connEl.classList.remove("filled");
+  connEl.innerHTML = "";
+  updateClockActive();
+  updateStats();
+  requestAnimationFrame(resizeOverlay);
+}
+
+// =========================================================
+//  INPUT COLUMN
+// =========================================================
+function buildInputColumn(N, numInputs) {
+  const col = document.createElement("div");
+  col.className = "input-col";
+  col.id = "input-col";
+
+  const hdr = document.createElement("div");
+  hdr.className = "col-label";
+  hdr.innerHTML = `<div class="col-title">Entradas</div>
+    <div class="col-formula">2<sup>${N}</sup> = ${numInputs} bits</div>`;
+  col.appendChild(hdr);
+
+  // flex space-evenly container — same total height as gate areas
+  const area = document.createElement("div");
+  area.className = "input-area";
+  area.style.height = areaH + "px";
+
+  for (let i = 0; i < numInputs; i++) {
+    const node = document.createElement("div");
+    node.className = "input-node";
+
+    // Bit label: x₀ x₁ ...
+    const lbl = document.createElement("span");
+    lbl.className = "input-bit-label";
+    lbl.innerHTML = "x<sub>" + i + "</sub>";
+
+    const toggle = document.createElement("div");
+    toggle.className = "input-toggle";
+    toggle.textContent = "0";
+    toggle.title = "Bit " + i + " — clic para cambiar";
+
+    const stub = document.createElement("div");
+    stub.className = "input-wire-stub";
+
+    const portDot = document.createElement("div");
+    portDot.className = "port";
+    portDot.title = "Bit " + i + " — punto de conexión";
+    const pid = "in-" + i;
+    portDot.dataset.portId = pid;
+    portMap.set(pid, { el: portDot, type: "out", level: -1, gate: i, pin: "out" });
+    portValues.set(pid, 0);
+
+    toggle.addEventListener("click", () => {
+      inputBits[i] ^= 1;
+      toggle.textContent = inputBits[i];
+      toggle.classList.toggle("on", inputBits[i] === 1);
+      stub.classList.toggle("on", inputBits[i] === 1);
+      portValues.set(pid, inputBits[i]);
+      if (circuitRunning) evaluateAndRender();
+    });
+    portDot.addEventListener("click", e => { e.stopPropagation(); onPortClick(pid); });
+
+    node.appendChild(lbl);
+    node.appendChild(toggle);
+    node.appendChild(stub);
+    node.appendChild(portDot);
+    area.appendChild(node);
+  }
+  col.appendChild(area);
+  return col;
+}
+
+// =========================================================
+//  LEVEL COLUMN
+// =========================================================
+function buildLevelColumn(nivel, i, N) {
+  const col = document.createElement("div");
+  col.className = "level-col";
+  col.dataset.level = i;
+
+  const hdr = document.createElement("div");
+  hdr.className = "col-label";
+  const exp = N - i;
+  hdr.innerHTML = `<div class="col-title">Nivel ${i}</div>
+    <div class="col-formula">2<sup>${exp}</sup> = ${nivel.gateCount} compuerta${nivel.gateCount > 1 ? "s" : ""}</div>`;
+
+  // Level-wide type selector (combinational only; FFs added via drag)
+  const sel = document.createElement("select");
+  sel.className = "level-type-sel";
+  sel.title = "Tipo de todas las compuertas del nivel (FFs: arrastra desde panel izq.)";
+  COMBO_TYPES.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    sel.appendChild(opt);
+  });
+  sel.value = nivel.tipo;
+  sel.addEventListener("change", () => {
+    if (circuitRunning) { sel.value = nivel.tipo; alert("Apaga el circuito primero."); return; }
+    const newType = sel.value;
+    // Reset ALL gates in this level to new combinational type
+    const levelStr = "-l" + i + "-";
+    cables = cables.filter(c => {
+      if (c.fromId.includes(levelStr) || c.toId.includes(levelStr)) {
+        if (c.pathEl) c.pathEl.remove();
+        if (c.hitEl)  c.hitEl.remove();
+        return false;
+      }
+      return true;
+    });
+    col.querySelectorAll(".gate-wrap").forEach(wrap => {
+      wrap.querySelectorAll(".port").forEach(p => { portMap.delete(p.dataset.portId); portValues.delete(p.dataset.portId); });
+    });
+    nivel.setTipo(newType);
+    const oldArea = col.querySelector(".gates-area");
+    if (oldArea) oldArea.remove();
+    buildGateCards(nivel, i, col);
+    col.classList.remove("ff-level");
+    updateStats();
+    updateClockActive();
+    updateCableHint();
+    requestAnimationFrame(resizeOverlay);
+  });
+  hdr.appendChild(sel);
+  col.appendChild(hdr);
+
+  buildGateCards(nivel, i, col);
+  return col;
+}
+
+function buildGateCards(nivel, i, col) {
+  const n = nivel.gateCount;
+  const gatesArea = document.createElement("div");
+  gatesArea.className = "gates-area";
+  gatesArea.style.height = areaH + "px";
+
+  // Space-evenly formula: center of gate g = areaH * (g+1) / (n+1)
+  const slotSpan = areaH / (n + 1);
+
+  for (let g = 0; g < n; g++) {
+    const centerY  = slotSpan * (g + 1);
+    const topY     = Math.round(centerY - GATE_H / 2);
+
+    const wrap = document.createElement("div");
+    wrap.className = "gate-wrap";
+    wrap.dataset.level = i;
+    wrap.dataset.gate  = g;
+    wrap.style.top       = topY + "px";
+    wrap.style.left      = "50%";
+    wrap.style.transform = "translateX(-50%)";
+
+    // FF reset button (visible only when gate is FF override)
+    const resetBtn = document.createElement("button");
+    resetBtn.className = "ff-reset-btn";
+    resetBtn.title = "Quitar FF \u2014 restaurar al tipo del nivel";
+    resetBtn.textContent = "\u00d7";
+    resetBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      if (circuitRunning) return;
+      const niv = niveles.find(nv => nv.i === i);
+      if (niv) applyFFToGate(i, g, niv.tipo, wrap, col, false);
+    });
+    wrap.appendChild(resetBtn);
+
+    buildSingleGateCard(nivel, i, g, wrap);
+    gatesArea.appendChild(wrap);
+  }
+  col.appendChild(gatesArea);
+}
+
+// Legacy removed: applyFFToGap / removeFFFromGap (replaced by connector system)
+function _legacyPlaceholder(){}
+
+function buildSingleGateCard(nivel, i, g, wrap) {
+  const oldCard = wrap.querySelector(".gate-card");
+  if (oldCard) oldCard.remove();
+  // Remove old ports
+  wrap.querySelectorAll(".port").forEach(p => { portMap.delete(p.dataset.portId); portValues.delete(p.dataset.portId); });
+
+  const tipo = nivel.compuertas[g].tipo;
+  const def  = GATE_DEFS[tipo] || GATE_DEFS.AND;
+
+  const card = document.createElement("div");
+  card.className = "gate-card";
+  card.style.height = GATE_H + "px";
+  card.style.width  = (GATE_W + 10 + 52) + "px";
+
+  // Input A
+  const pidA = "g-l" + i + "-g" + g + "-A";
+  const dotA = makeDot(pidA, "in", i, g, "A");
+  dotA.classList.add("port-abs");
+  dotA.style.left = "0";
+  dotA.style.top  = (def.inA_Y - 5) + "px";
+  card.appendChild(dotA);
+
+  // Input B
+  if (def.inB_Y != null) {
+    const pidB = "g-l" + i + "-g" + g + "-B";
+    const dotB = makeDot(pidB, "in", i, g, "B");
+    dotB.classList.add("port-abs");
+    dotB.style.left = "0";
+    dotB.style.top  = (def.inB_Y - 5) + "px";
+    card.appendChild(dotB);
+  }
+
+  // Gate SVG
+  const svgWrap = document.createElement("div");
+  svgWrap.className = "gate-svg-wrap";
+  svgWrap.dataset.level = i;
+  svgWrap.dataset.gate  = g;
+  svgWrap.innerHTML = renderGateSVG(tipo, 0, 0, 0);
+  card.appendChild(svgWrap);
+
+  // Output port
+  const pidOut = "g-l" + i + "-g" + g + "-out";
+  const dotOut = makeDot(pidOut, "out", i, g, "out");
+  dotOut.classList.add("port-abs");
+  dotOut.style.left = (GATE_W + 10 + 4) + "px";
+  dotOut.style.top  = (GATE_H / 2 - 5) + "px";
+  card.appendChild(dotOut);
+
+  // Output badge
+  const badge = document.createElement("div");
+  const isFFType = !!def.isFF;
+  badge.className = "output-badge port-abs" + (isFFType ? " ff-badge ff-off" : "");
+  badge.dataset.level = i;
+  badge.dataset.gate  = g;
+  badge.style.left = (GATE_W + 10 + 20) + "px";
+  badge.style.top  = (GATE_H / 2 - 12) + "px";
+  badge.textContent = isFFType ? "Q:?" : "?";
+  if (isFFType) badge.title = "Q = estado del FF. Usa Tick de Clock para latchar.";
+  card.appendChild(badge);
+
+  wrap.appendChild(card);
+  // Mark wrap as FF override if type differs from level default
+  const nivel2 = niveles.find(n => n.i === i);
+  wrap.classList.toggle("ff-override", !!isFFType);
+}
+
+// Apply a type to a specific gate (FF drop or reset)
+function applyFFToGate(i, g, newType, wrap, col, isFF) {
+  const levelGateStr = "g-l" + i + "-g" + g + "-";
+  // Remove cables for this gate
+  cables = cables.filter(c => {
+    if (c.fromId.startsWith(levelGateStr) || c.toId.startsWith(levelGateStr)) {
+      if (c.pathEl) c.pathEl.remove();
+      if (c.hitEl)  c.hitEl.remove();
+      return false;
+    }
+    return true;
+  });
+  // Replace compuerta
+  const nivel = niveles.find(n => n.i === i);
+  if (nivel) nivel.compuertas[g] = new Compuerta(newType);
+  // Rebuild card
+  buildSingleGateCard(nivel, i, g, wrap);
+  // FF border on column
+  const anyFF = nivel ? nivel.compuertas.some(c => c.isFF()) : false;
+  col.classList.toggle("ff-level", anyFF);
+  updateClockActive();
+  updateCableHint();
+  updateStats();
+  requestAnimationFrame(resizeOverlay);
+}
+
+// Legacy alias (kept for any residual calls)
+function changeGateType(i, g, newType, wrap, col) {
+  applyFFToGate(i, g, newType, wrap, col, FF_TYPES.includes(newType));
+}
+
+function makeDot(pid, type, level, gate, pin) {
+  const dot = document.createElement("div");
+  dot.className = "port";
+  dot.dataset.portId = pid;
+  dot.title = pid;
+  portMap.set(pid, { el: dot, type, level, gate, pin });
+  portValues.set(pid, 0);
+  dot.addEventListener("click", e => { e.stopPropagation(); onPortClick(pid); });
+  return dot;
+}
+
+// =========================================================
+//  CABLE DRAWING
+// =========================================================
+function onPortClick(pid) {
+  const info = portMap.get(pid);
+  if (!info) return;
+
+  if (!drawingFrom) {
+    // Start a cable: only from output ports
+    if (info.type !== "out") {
+      flashError("Empieza el cable desde un puerto de SALIDA (punto del lado derecho/entradas).");
+      return;
+    }
+    drawingFrom = pid;
+    info.el.classList.add("pending");
+    overlay.classList.add("drawing-mode");
+    // Create temp path
+    tempPath = document.createElementNS("http://www.w3.org/2000/svg","path");
+    tempPath.setAttribute("class","cable-path temp");
+    overlay.appendChild(tempPath);
+    cableHint.textContent = "Ahora haz clic en un puerto de ENTRADA para completar el cable. ESC para cancelar.";
+  } else {
+    // Complete cable: target must be input port
+    if (info.type !== "in") {
+      // Allow cancelling by clicking another output
+      if (info.type === "out") {
+        cancelDrawing();
+        onPortClick(pid); // restart from new port
+        return;
+      }
+    }
+    // Validate: no self-loop
+    if (pid === drawingFrom) { cancelDrawing(); return; }
+    // Auto-replace: if port already has a cable, silently delete it
+    const existing = cables.find(c => c.toId === pid);
+    if (existing) deleteCable(existing.id);
+
+    const fromPos = getPortPos(portMap.get(drawingFrom).el);
+    const toPos   = getPortPos(info.el);
+    const { pathEl, hitEl } = createCablePair(fromPos, toPos);
+
+    const id = "cable-" + (++cableIdSeq);
+    // Click on the wide invisible hit area — easy to target
+    hitEl.addEventListener("click", e => { e.stopPropagation(); selectCable(id, e.clientX, e.clientY); });
+
+    cables.push({ id, fromId: drawingFrom, toId: pid, pathEl, hitEl });
+
+    portMap.get(drawingFrom).el.classList.add("connected");
+    info.el.classList.add("connected");
+
+    finishDrawing();
+    cableHint.textContent = "Cable creado. Crea mas o enciende el circuito.";
+    if (circuitRunning) evaluateAndRender();
+  }
+}
+
+function cancelDrawing() {
+  if (drawingFrom) {
+    portMap.get(drawingFrom)?.el.classList.remove("pending");
+    drawingFrom = null;
+  }
+  if (tempPath) { tempPath.remove(); tempPath = null; }
+  overlay.classList.remove("drawing-mode");
+  deselectCable();
+  cableHint.textContent = "Clic en punto de salida para comenzar un cable.";
+}
+
+function finishDrawing() {
+  portMap.get(drawingFrom)?.el.classList.remove("pending");
+  drawingFrom = null;
+  if (tempPath) { tempPath.remove(); tempPath = null; }
+  overlay.classList.remove("drawing-mode");
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") cancelDrawing();
+  if ((e.key === "Delete" || e.key === "Backspace") && selectedCableId && !drawingFrom) {
+    deleteCable(selectedCableId);
+    deselectCable();
   }
 });
-</script>
 
+// Delete-cable button in tooltip
+deleteCableBtn.addEventListener("click", () => {
+  if (selectedCableId) { deleteCable(selectedCableId); deselectCable(); }
+});
+
+// Click outside cable tooltip = deselect
+document.addEventListener("click", e => {
+  if (selectedCableId && !e.target.closest("#cable-tooltip") && e.target.tagName !== "path") {
+    deselectCable();
+  }
+});
+
+function selectCable(id, clientX, clientY) {
+  if (selectedCableId === id) { deselectCable(); return; }
+  deselectCable();
+  selectedCableId = id;
+  const cable = cables.find(c => c.id === id);
+  if (cable) cable.pathEl.classList.add("cable-selected");
+  // Position tooltip near mouse
+  cableTooltip.style.left = (clientX + 12) + "px";
+  cableTooltip.style.top  = (clientY - 44) + "px";
+  cableTooltip.classList.remove("hidden");
+}
+
+function deselectCable() {
+  if (selectedCableId) {
+    const cable = cables.find(c => c.id === selectedCableId);
+    if (cable) cable.pathEl.classList.remove("cable-selected");
+  }
+  selectedCableId = null;
+  cableTooltip.classList.add("hidden");
+}
+
+// Mouse follow for temp cable
+overlay.addEventListener("mousemove", e => {
+  if (!drawingFrom || !tempPath) return;
+  const fromPos = getPortPos(portMap.get(drawingFrom).el);
+  const wsRect  = workspace.getBoundingClientRect();
+  const mx = e.clientX - wsRect.left;
+  const my = e.clientY - wsRect.top;
+  tempPath.setAttribute("d", bezier(fromPos.x, fromPos.y, mx, my));
+});
+
+overlay.addEventListener("click", e => {
+  // Clicking blank area cancels
+  if (e.target === overlay) cancelDrawing();
+});
+
+function createCablePair(from, to) {
+  const d = bezier(from.x, from.y, to.x, to.y);
+  // Visual thin line
+  const pathEl = document.createElementNS("http://www.w3.org/2000/svg","path");
+  pathEl.setAttribute("class","cable-path");
+  pathEl.setAttribute("d", d);
+  overlay.appendChild(pathEl);
+  // Invisible thick hit area on top for easy clicking
+  const hitEl = document.createElementNS("http://www.w3.org/2000/svg","path");
+  hitEl.setAttribute("class","cable-hit");
+  hitEl.setAttribute("d", d);
+  overlay.appendChild(hitEl);
+  return { pathEl, hitEl };
+}
+
+function bezier(x1, y1, x2, y2) {
+  const offset = Math.max(40, Math.abs(x2-x1) * 0.5);
+  return `M ${x1} ${y1} C ${x1+offset} ${y1} ${x2-offset} ${y2} ${x2} ${y2}`;
+}
+
+function getPortPos(el) {
+  const wsRect = workspace.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  return {
+    x: r.left + r.width/2  - wsRect.left,
+    y: r.top  + r.height/2 - wsRect.top
+  };
+}
+
+function deleteCable(id) {
+  const idx = cables.findIndex(c => c.id === id);
+  if (idx === -1) return;
+  const c = cables.splice(idx,1)[0];
+  if (c.pathEl) c.pathEl.remove();
+  if (c.hitEl)  c.hitEl.remove();
+  // Unmark connected ports (only if no other cable uses them)
+  [c.fromId, c.toId].forEach(pid => {
+    const stillUsed = cables.some(ca => ca.fromId === pid || ca.toId === pid);
+    if (!stillUsed) portMap.get(pid)?.el.classList.remove("connected");
+  });
+  if (circuitRunning) evaluateAndRender();
+}
+
+// =========================================================
+//  OVERLAY RESIZE
+// =========================================================
+function resizeOverlay() {
+  overlay.setAttribute("width",  workspace.scrollWidth);
+  overlay.setAttribute("height", workspace.scrollHeight);
+}
+
+// Redraw cables on scroll / resize
+wsCont.addEventListener("scroll", refreshCablePaths);
+window.addEventListener("resize", () => { resizeOverlay(); refreshCablePaths(); });
+
+function refreshCablePaths() {
+  resizeOverlay();
+  cables.forEach(c => {
+    const fromInfo = portMap.get(c.fromId);
+    const toInfo   = portMap.get(c.toId);
+    if (!fromInfo || !toInfo) return;
+    const fp = getPortPos(fromInfo.el);
+    const tp = getPortPos(toInfo.el);
+    const d = bezier(fp.x, fp.y, tp.x, tp.y);
+    c.pathEl.setAttribute("d", d);
+    if (c.hitEl) c.hitEl.setAttribute("d", d);
+  });
+}
+
+// =========================================================
+//  CIRCUIT ON/OFF
+// =========================================================
+circuitSwitch.addEventListener("change", function() { setCircuitState(this.checked); });
+
+function setCircuitState(on) {
+  circuitRunning = on;
+  circuitSwitch.checked = on;
+  levelInput.disabled = on;
+  generateBtn.disabled = on;
+  statusBadge.textContent = on ? "ENCENDIDO" : "APAGADO";
+  statusBadge.className   = "status-badge " + (on ? "status-on" : "status-off");
+  if (on) { evaluateAndRender(); } else { resetDisplays(); }
+}
+
+// =========================================================
+//  CLOCK TICK (for FF levels)
+// =========================================================
+clockBtn.addEventListener("click", () => {
+  if (!circuitRunning) { alert("Enciende el circuito primero."); return; }
+  // Latch all FF gates (level gates + connector FFs)
+  niveles.forEach(n => n.tick());
+  connFFs.forEach(({ compuerta }) => { if (compuerta.isFF()) compuerta.latch(); });
+  evaluateAndRender();
+  // Visual flash
+  clockBtn.classList.add("ticked");
+  setTimeout(() => clockBtn.classList.remove("ticked"), 300);
+});
+
+// =========================================================
+//  EVALUATION
+// =========================================================
+function evaluateAndRender() {
+  if (!circuitRunning) return;
+
+  // 1. Seed input bit port values
+  inputBits.forEach((v, i) => portValues.set("in-" + i, v));
+
+  // 2. Propagate level by level, evaluating the preceding connector FF first.
+  //    Connector connN=i sits between input col (or level i-1) and level i.
+  niveles.forEach((nivel) => {
+    const i = nivel.i; // 1-indexed level position
+
+    // Connector FF before this level (connN === i), if any
+    if (connFFs.has(i)) {
+      const { compuerta } = connFFs.get(i);
+      const pfx = "ffconn-" + i;
+      const cIn = cables.find(c => c.toId === pfx + "-in");
+      const cB  = cables.find(c => c.toId === pfx + "-B");
+      compuerta.A = cIn ? (portValues.get(cIn.fromId) ?? 0) : 0;
+      compuerta.B = cB  ? (portValues.get(cB.fromId)  ?? 0) : 0;
+      const outVal = compuerta.isFF() ? compuerta.Q : compuerta.calcular();
+      portValues.set(pfx + "-out", outVal);
+      // Visual feedback on Q display
+      const connEl = workspace.querySelector('.col-connector[data-conn="' + i + '"]');
+      const qValEl = connEl ? connEl.querySelector(".cff-q-val") : null;
+      if (qValEl) {
+        qValEl.textContent = "Q:" + outVal;
+        qValEl.classList.toggle("ff-on-lbl", outVal === 1);
+      }
+    }
+
+    nivel.compuertas.forEach((comp, g) => {
+      const pidA   = "g-l" + i + "-g" + g + "-A";
+      const pidB   = "g-l" + i + "-g" + g + "-B";
+      const pidOut = "g-l" + i + "-g" + g + "-out";
+
+      const cA = cables.find(c => c.toId === pidA);
+      const cB = cables.find(c => c.toId === pidB);
+      comp.A = cA ? (portValues.get(cA.fromId) ?? 0) : 0;
+      comp.B = cB ? (portValues.get(cB.fromId) ?? 0) : 0;
+
+      const outVal = comp.isFF() ? comp.Q : comp.calcular();
+      portValues.set(pidOut, outVal);
+
+      const svgWrap = workspace.querySelector('.gate-svg-wrap[data-level="' + i + '"][data-gate="' + g + '"]');
+      if (svgWrap) svgWrap.innerHTML = renderGateSVG(comp.tipo, comp.A, comp.B, outVal);
+
+      const badge = workspace.querySelector('.output-badge[data-level="' + i + '"][data-gate="' + g + '"]');
+      if (badge) {
+        const isFF = comp.isFF();
+        if (isFF) {
+          badge.textContent = "Q:" + outVal;
+          badge.classList.remove("on","ff-on","ff-off");
+          badge.classList.add(outVal === 1 ? "ff-on" : "ff-off");
+        } else {
+          badge.textContent = outVal;
+          badge.classList.remove("ff-on","ff-off");
+          badge.classList.toggle("on",  outVal === 1);
+          badge.classList.toggle("off", outVal === 0);
+        }
+      }
+    });
+  });
+
+  // 3. Color cables by carried signal value (green=1, red=0)
+  cables.forEach(c => {
+    const val = portValues.get(c.fromId) ?? 0;
+    c.pathEl.classList.toggle("active", val === 1);
+    c.pathEl.classList.toggle("zero",   val === 0);
+  });
+}
+
+function resetDisplays() {
+  workspace.querySelectorAll(".output-badge").forEach(b => {
+    const isFF = b.classList.contains("ff-badge");
+    b.textContent = isFF ? "Q:?" : "?";
+    b.classList.remove("on", "off", "ff-on");
+    if (isFF) b.classList.add("ff-off"); else b.classList.remove("ff-off");
+  });
+  cables.forEach(c => { c.pathEl.classList.remove("active"); c.pathEl.classList.remove("zero"); });
+  // Reset connector FF Q displays
+  connFFs.forEach(({tipo}, connN) => {
+    const connEl = workspace.querySelector('.col-connector[data-conn="' + connN + '"]');
+    const qValEl = connEl ? connEl.querySelector(".cff-q-val") : null;
+    if (qValEl) { qValEl.textContent = "Q:?"; qValEl.classList.remove("ff-on-lbl"); }
+  });
+  // Reset gate SVGs using each gate's own type
+  niveles.forEach(nivel => {
+    nivel.compuertas.forEach((comp, g) => {
+      const i = nivel.i;
+      const svgWrap = workspace.querySelector('.gate-svg-wrap[data-level="' + i + '"][data-gate="' + g + '"]');
+      if (svgWrap) svgWrap.innerHTML = renderGateSVG(comp.tipo, 0, 0, 0);
+    });
+  });
+}
+
+// =========================================================
+//  CLEAR
+// =========================================================
+function clearAll(showPlaceholder = true) {
+  // Remove level columns, input col, and connectors
+  workspace.querySelectorAll(".input-col,.level-col,.col-connector").forEach(el => el.remove());
+  // Remove all cable paths from overlay
+  while(overlay.firstChild) overlay.removeChild(overlay.firstChild);
+  // Reset state
+  niveles = []; inputBits = []; cables = [];
+  portMap.clear(); portValues.clear();
+  connFFs.clear();
+  cableIdSeq = 0; drawingFrom = null; tempPath = null;
+  overlay.classList.remove("drawing-mode");
+  deselectCable();
+
+  circuitSwitch.disabled   = true;
+  circuitSwitch.checked    = false;
+  clockBtn.disabled        = true;
+  clockBtn.classList.remove("ff-active", "ticked");
+  clearBtn.classList.add("hidden");
+  clearCablesBtn.classList.add("hidden");
+  circuitInfo.classList.add("hidden");
+  levelInput.disabled      = false;
+  generateBtn.disabled     = false;
+  circuitRunning           = false;
+  statusBadge.textContent  = "APAGADO";
+  statusBadge.className    = "status-badge status-off";
+
+  if (showPlaceholder) {
+    placeholder.style.display = "flex";
+    switchHint.style.display  = "block";
+  }
+}
+
+// =========================================================
+//  STATS + HINTS
+// =========================================================
+function updateStats() {
+  const rows = niveles.map(n => {
+    const types = [...new Set(n.compuertas.map(c => c.tipo.replace("FF","FF-")))].join(", ");
+    return "<div class='stats-row'><span>Nivel " + n.i + " &mdash; " + types + "</span>" +
+           "<span class='stats-val'>" + n.gateCount + " c.</span></div>";
+  }).join("");
+  circuitStats.innerHTML = rows;
+}
+
+function updateClockActive() {
+  const hasFF = niveles.some(n => n.compuertas.some(c => c.isFF())) ||
+                [...connFFs.values()].some(({compuerta}) => compuerta.isFF());
+  clockBtn.classList.toggle("ff-active", hasFF);
+}
+
+function updateCableHint() {
+  cableHint.textContent = cables.length > 0
+    ? cables.length + " cable(s) activo(s). Clic en un cable para borrarlo."
+    : "Clic en punto de salida (der.) para comenzar un cable.";
+}
+
+function flashError(msg) {
+  cableHint.classList.add("hint-error");
+  cableHint.textContent = msg;
+  setTimeout(() => { cableHint.classList.remove("hint-error"); updateCableHint(); }, 2500);
+}
+
+// =========================================================
+//  DRAG-AND-DROP: FF palette → gate cards
+// =========================================================
+function initFFDragPalette() {
+  document.querySelectorAll(".ff-drag-chip").forEach(chip => {
+    // Remove old listeners by cloning
+    const fresh = chip.cloneNode(true);
+    chip.parentNode.replaceChild(fresh, chip);
+    fresh.addEventListener("dragstart", e => {
+      draggedFFType = fresh.dataset.ffType;
+      e.dataTransfer.setData("ff-type", draggedFFType);
+      e.dataTransfer.effectAllowed = "copy";
+      fresh.style.opacity = "0.55";
+    });
+    fresh.addEventListener("dragend", () => {
+      fresh.style.opacity = "";
+      draggedFFType = null;
+    });
+  });
+}
+</script>
 </body>
 </html>
