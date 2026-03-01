@@ -8,20 +8,18 @@
 </head>
 <body>
 
-<!-- LEFT SIDEBAR: gate reference palette -->
+<!-- sidebar izquierda -->
 <div class="sidebar-left">
-  <h3>Referencia</h3>
+  <h3>Compuertas</h3>
   <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 H34 A16,16 0 0,1 34,38 H8 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><text x="21" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">AND</text></svg><div><div class="chip-label">AND</div><div class="chip-desc">A . B</div></div></div>
   <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 C22,6 38,6 44,22 C38,38 22,38 8,38 Q22,22 8,6 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><text x="24" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">OR</text></svg><div><div class="chip-label">OR</div><div class="chip-desc">A + B</div></div></div>
   <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 L50,22 L8,38 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><circle cx="55" cy="22" r="4" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><text x="24" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">NOT</text></svg><div><div class="chip-label">NOT</div><div class="chip-desc">A barra</div></div></div>
   <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M12,6 C26,6 40,6 46,22 C40,38 26,38 12,38 Q26,22 12,6 Z" fill="#1e2a4a" stroke="#4c6ef5" stroke-width="1.6"/><path d="M6,6 Q20,22 6,38" fill="none" stroke="#4c6ef5" stroke-width="1.6"/><text x="27" y="26" fill="#94a3b8" font-size="7.5" text-anchor="middle" font-family="monospace">XOR</text></svg><div><div class="chip-label">XOR</div><div class="chip-desc">A xor B</div></div></div>
-  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 H32 A14,14 0 0,1 32,38 H8 Z" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><circle cx="50" cy="22" r="4" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><text x="20" y="26" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="monospace">NAND</text></svg><div><div class="chip-label">NAND</div><div class="chip-desc">not(A.B)</div></div></div>
-  <div class="gate-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 C20,6 36,6 42,22 C36,38 20,38 8,38 Q20,22 8,6 Z" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><circle cx="46" cy="22" r="4" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><text x="23" y="26" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="monospace">NOR</text></svg><div><div class="chip-label">NOR</div><div class="chip-desc">not(A+B)</div></div></div>
+  <div class="gate-chip inv-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 H32 A14,14 0 0,1 32,38 H8 Z" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><circle cx="50" cy="22" r="4" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><text x="20" y="26" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="monospace">NAND</text></svg><div><div class="chip-label">NAND</div><div class="chip-desc">not(A.B)</div></div></div>
+  <div class="gate-chip inv-chip"><svg width="44" height="28" viewBox="0 0 64 44"><path d="M8,6 C20,6 36,6 42,22 C36,38 20,38 8,38 Q20,22 8,6 Z" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><circle cx="46" cy="22" r="4" fill="#1e2a4a" stroke="#e879f9" stroke-width="1.6"/><text x="23" y="26" fill="#c4b5fd" font-size="7.5" text-anchor="middle" font-family="monospace">NOR</text></svg><div><div class="chip-label">NOR</div><div class="chip-desc">not(A+B)</div></div></div>
   <hr class="divider">
-  <div class="section-label">Flip-Flops <span style="color:#6d28d9;font-size:8px">(arrastra al circuito)</span></div>
-  <div class="gate-chip ff-drag-chip" draggable="true" data-ff-type="FFD"><svg width="44" height="28" viewBox="0 0 64 44"><rect x="8" y="4" width="46" height="36" rx="5" fill="#1b1242" stroke="#7c3aed" stroke-width="1.6"/><text x="31" y="18" fill="#a78bfa" font-size="9" text-anchor="middle" font-family="monospace" font-weight="700">FF-D</text><text x="13" y="30" fill="#6d28d9" font-size="7" font-family="monospace">D</text><text x="48" y="14" fill="#4ade80" font-size="7" text-anchor="end" font-family="monospace">Q</text></svg><div><div class="chip-label">FF-D</div><div class="chip-desc">Dato &mdash; arrastra</div></div></div>
+  <div class="section-label">Flip-Flops</div>
   <div class="gate-chip ff-drag-chip" draggable="true" data-ff-type="FFSR"><svg width="44" height="28" viewBox="0 0 64 44"><rect x="8" y="4" width="46" height="36" rx="5" fill="#1b1242" stroke="#7c3aed" stroke-width="1.6"/><text x="31" y="15" fill="#a78bfa" font-size="8" text-anchor="middle" font-family="monospace" font-weight="700">FF-SR</text><text x="13" y="26" fill="#6d28d9" font-size="7" font-family="monospace">S</text><text x="13" y="36" fill="#991b1b" font-size="7" font-family="monospace">R</text></svg><div><div class="chip-label">FF-SR</div><div class="chip-desc">Set/Reset &mdash; arrastra</div></div></div>
-  <div class="gate-chip ff-drag-chip" draggable="true" data-ff-type="FFJK"><svg width="44" height="28" viewBox="0 0 64 44"><rect x="8" y="4" width="46" height="36" rx="5" fill="#1b1242" stroke="#7c3aed" stroke-width="1.6"/><text x="31" y="15" fill="#a78bfa" font-size="8" text-anchor="middle" font-family="monospace" font-weight="700">FF-JK</text><text x="13" y="26" fill="#6d28d9" font-size="7" font-family="monospace">J</text><text x="13" y="36" fill="#991b1b" font-size="7" font-family="monospace">K</text></svg><div><div class="chip-label">FF-JK</div><div class="chip-desc">JK &mdash; arrastra</div></div></div>
   <hr class="divider">
   <div class="legend">
     <div class="legend-row"><div class="legend-dot on"></div>Señal 1</div>
@@ -30,33 +28,42 @@
   </div>
   <hr class="divider">
   <div class="hint hint-left">
-    <b style="color:#94a3b8">Cables:</b> clic en salida &rarr; entrada.<br>
-    Clic cable = seleccionar; <b>Del</b> = borrar.<br>
-    <b style="color:#a78bfa">FF:</b> arrastra chip morado &rarr; suelta en la zona <b>entre dos columnas</b> para insertar el FF en ese canal.<br>
-    <span style="color:#7c3aed">×</span> en esquina = quitar FF.
+    Clic: salida &rarr; entrada para cablear.<br>
+    Clic cable: mover extremos o borrar.<br>
+    FF: arrastra entre columnas.<br>
+    <span style="color:#7c3aed">&times;</span> = quitar FF.<br>
+    <span style="color:#3b82f6">Zoom:</span> Ctrl+rueda, Ctrl+/&minus; o botones &#x2197;
   </div>
+  <hr class="divider">
+  <button class="theme-toggle" id="themeToggle" title="Cambiar modo claro/oscuro">
+    <span class="theme-icon" id="themeIcon">&#9790;</span>
+    <span class="theme-label" id="themeLabel">Modo Claro</span>
+  </button>
 </div>
 
-<!-- WORKSPACE -->
+<!-- area de trabajo -->
 <div class="workspace-container" id="wsCont">
   <div class="workspace" id="workspace">
     <svg id="cable-overlay"></svg>
-    <div id="ws-placeholder">Configura y genera el circuito</div>
+    <div id="ws-placeholder">Elige los niveles y genera el circuito</div>
+  </div>
+  <!-- Zoom controls -->
+  <div class="zoom-controls" id="zoomControls">
+    <button class="zoom-btn" id="zoomOutBtn" title="Alejar (Ctrl + -)">&#8722;</button>
+    <span class="zoom-display" id="zoomDisplay">100%</span>
+    <button class="zoom-btn" id="zoomInBtn" title="Acercar (Ctrl + +)">&#43;</button>
+    <button class="zoom-btn zoom-btn-reset" id="zoomResetBtn" title="Restablecer zoom">&#8634;</button>
   </div>
 </div>
 
-<!-- CABLE TOOLTIP (fixed, shown on cable click) -->
-<div id="cable-tooltip" class="hidden">
-  <div class="tooltip-label">Cable seleccionado</div>
-  <button class="tooltip-btn" id="deleteCableBtn">✕ Borrar cable</button>
-</div>
 
-<!-- RIGHT SIDEBAR: controls -->
+
+<!-- sidebar derecha -->
 <div class="sidebar-right">
 
   <div>
     <h4>Configuracion</h4>
-    <label class="form-label">Niveles (1 a 6)</label>
+    <label class="form-label">Niveles</label>
     <input type="number" id="levelInput" min="1" max="6" value="3">
     <div class="error" id="errorMsg"></div>
     <button class="btn btn-primary" id="generateBtn">Generar circuito</button>
@@ -72,21 +79,22 @@
       <span class="slider"></span>
     </label>
     <div id="statusBadge" class="status-badge status-off">APAGADO</div>
-    <p id="switchHint" class="hint">Genera el circuito primero</p>
+    <p id="switchHint" class="hint">Genera el circuito para activar</p>
   </div>
 
   <hr class="divider">
 
   <div>
-    <h4>Clock (Flip-Flops)</h4>
-    <button class="clock-btn" id="clockBtn" disabled>Tick de Clock</button>
-    <p class="hint">Pulsa para latchear<br>los Flip-Flops activos</p>
+    <h4>Clock</h4>
+    <button class="clock-btn" id="clockBtn" disabled>&#9201; Pulso de Clock</button>
+    <p class="hint">Fuerza re-evaluaci&oacute;n de los FF</p>
   </div>
 
   <hr class="divider">
 
   <div>
     <h4>Cables</h4>
+    <button class="btn btn-success hidden" id="autoConnectBtn">&#9889; Auto-conectar niveles</button>
     <button class="btn btn-warn hidden" id="clearCablesBtn">Eliminar todos los cables</button>
     <p class="hint" id="cableHint">Haz clic para crear cables entre compuertas</p>
   </div>
@@ -94,7 +102,7 @@
   <hr class="divider">
 
   <div id="circuitInfo" class="hidden">
-    <h4>Resumen</h4>
+    <h4>Niveles</h4>
     <div id="circuitStats"></div>
   </div>
 
@@ -119,15 +127,18 @@ const statusBadge   = document.getElementById("statusBadge");
 const switchHint    = document.getElementById("switchHint");
 const clockBtn      = document.getElementById("clockBtn");
 const clearCablesBtn = document.getElementById("clearCablesBtn");
+const autoConnectBtn = document.getElementById("autoConnectBtn");
 const cableHint   = document.getElementById("cableHint");
 const circuitInfo = document.getElementById("circuitInfo");
 const circuitStats = document.getElementById("circuitStats");
-const cableTooltip  = document.getElementById("cable-tooltip");
-const deleteCableBtn = document.getElementById("deleteCableBtn");
+const zoomInBtn    = document.getElementById("zoomInBtn");
+const zoomOutBtn   = document.getElementById("zoomOutBtn");
+const zoomResetBtn = document.getElementById("zoomResetBtn");
+const zoomDisplay  = document.getElementById("zoomDisplay");
 
-const ALL_TYPES = ["AND","OR","NOT","XOR","NAND","NOR","FFD","FFSR","FFJK"];
+const ALL_TYPES = ["AND","OR","NOT","XOR","NAND","NOR","FFSR"];
 const COMBO_TYPES = ["AND","OR","NOT","XOR","NAND","NOR"]; // non-FF types for level selector
-const FF_TYPES    = ["FFD","FFSR","FFJK"];
+const FF_TYPES    = ["FFSR"];
 const MAX_LEVELS = 6;
 // GATE_W and GATE_H are defined in compuerta_universal.js
 
@@ -143,10 +154,13 @@ let areaH = 400; // shared gates-area height (px), set on buildCircuit
 // cable drawing state
 let drawingFrom  = null;
 let tempPath     = null;
-let selectedCableId = null;
-let draggedFFType = null; // FF type being dragged from palette
+let draggedFFType = null;
 let connFFs = new Map();  // connN → {tipo, compuerta, topPx}
 let draggedConnN = null;  // connN being repositioned (drag from card)
+let zoomLevel = 1;        // current workspace zoom
+const ZOOM_MIN = 0.3;
+const ZOOM_MAX = 3;
+const ZOOM_STEP = 0.15;
 
 // =========================================================
 //  GENERATE
@@ -174,8 +188,11 @@ clearCablesBtn.addEventListener("click", () => {
   });
   cables = [];
   portMap.forEach(p => { p.el.classList.remove("connected"); });
-  deselectCable();
   updateCableHint();
+});
+
+autoConnectBtn.addEventListener("click", () => {
+  autoConnectByLevels();
 });
 
 function buildCircuit(N) {
@@ -218,6 +235,7 @@ function buildCircuit(N) {
   clockBtn.disabled = false;
   clearBtn.classList.remove("hidden");
   clearCablesBtn.classList.remove("hidden");
+  autoConnectBtn.classList.remove("hidden");
   switchHint.style.display = "none";
   circuitInfo.classList.remove("hidden");
   updateStats();
@@ -241,6 +259,7 @@ function buildConnector(connN) {
 
   c.addEventListener("dragover", e => {
     e.preventDefault();
+    if (circuitRunning) return;
     // Allow both new FF drops and repositioning
     if (!connFFs.has(connN) || draggedConnN === connN) {
       c.classList.add("drag-active");
@@ -253,6 +272,9 @@ function buildConnector(connN) {
     const rect   = c.getBoundingClientRect();
     const rawY   = e.clientY - rect.top;
     const topPx  = Math.min(Math.max(rawY, 20), c.offsetHeight - 20);
+
+    // Block all drops while circuit is running
+    if (circuitRunning) { alert("Apaga el circuito primero."); return; }
 
     // Reposition existing FF on same connector
     if (draggedConnN === connN && connFFs.has(connN)) {
@@ -267,7 +289,6 @@ function buildConnector(connN) {
     // New FF from palette
     const ffType = e.dataTransfer.getData("ff-type") || draggedFFType;
     if (!ffType) return;
-    if (circuitRunning) { alert("Apaga el circuito primero."); return; }
     applyFFToConnector(connN, ffType, c, false, topPx);
   });
   return c;
@@ -306,12 +327,13 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   const card = document.createElement("div");
   card.className = "conn-ff-card";
   card.style.top = topPx + "px";
-  // Card height: 3-pin (SR/JK) = 66px, 1-pin (D) = 46px
-  const cardH = isTwoInput ? 66 : 46;
+  // Card height: 3-pin (SR/JK) = 130px, 1-pin (D) = 100px (extra space for state panel)
+  const cardH = isTwoInput ? 130 : 100;
   card.style.height = cardH + "px";
-  // Make the card itself draggable for repositioning
+  // Make the card itself draggable for repositioning (only when circuit is OFF)
   card.draggable = true;
   card.addEventListener("dragstart", e => {
+    if (circuitRunning) { e.preventDefault(); return; }
     draggedConnN = connN;
     e.dataTransfer.setData("conn-reposition", String(connN));
     e.dataTransfer.effectAllowed = "move";
@@ -345,17 +367,39 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   }
   card.appendChild(leftCol);
 
-  // ── BODY
+  // ── BODY with real-time state display
   const body = document.createElement("div");
   body.className = "cff-body";
   const typeLbl = document.createElement("span");
   typeLbl.className = "cff-type-lbl";
   typeLbl.textContent = ffType.replace("FF","FF-");
   body.appendChild(typeLbl);
-  const qVal = document.createElement("span");
-  qVal.className = "cff-q-val";
-  qVal.textContent = "Q:?";
-  body.appendChild(qVal);
+
+  // State monitor panel
+  const statePanel = document.createElement("div");
+  statePanel.className = "cff-state-panel";
+
+  // S input row
+  const sRow = document.createElement("div");
+  sRow.className = "cff-state-row";
+  sRow.innerHTML = '<span class="cff-state-label">S:</span><span class="cff-state-val" data-field="s">0</span>';
+  statePanel.appendChild(sRow);
+
+  // R input row (only for 2-input FFs)
+  if (isTwoInput) {
+    const rRow = document.createElement("div");
+    rRow.className = "cff-state-row";
+    rRow.innerHTML = '<span class="cff-state-label">R:</span><span class="cff-state-val" data-field="r">0</span>';
+    statePanel.appendChild(rRow);
+  }
+
+  // Q output row
+  const qRow = document.createElement("div");
+  qRow.className = "cff-state-row cff-state-row-q";
+  qRow.innerHTML = '<span class="cff-state-label cff-state-label-q">Q:</span><span class="cff-state-val cff-q-val" data-field="q">?</span>';
+  statePanel.appendChild(qRow);
+
+  body.appendChild(statePanel);
   card.appendChild(body);
 
   // ── RIGHT: Q output pin
@@ -504,7 +548,8 @@ function buildLevelColumn(nivel, i, N) {
   const hdr = document.createElement("div");
   hdr.className = "col-label";
   const exp = N - i;
-  hdr.innerHTML = `<div class="col-title">Nivel ${i}</div>
+  const displayLevel = N - i + 1; // descending: 2^0 gates = Nivel 1
+  hdr.innerHTML = `<div class="col-title">Nivel ${displayLevel}</div>
     <div class="col-formula">2<sup>${exp}</sup> = ${nivel.gateCount} compuerta${nivel.gateCount > 1 ? "s" : ""}</div>`;
 
   // Level-wide type selector (combinational only; FFs added via drag)
@@ -709,33 +754,28 @@ function onPortClick(pid) {
   const info = portMap.get(pid);
   if (!info) return;
 
+  // ── Normal drawing ───────────────────────────────────────
   if (!drawingFrom) {
-    // Start a cable: only from output ports
     if (info.type !== "out") {
-      flashError("Empieza el cable desde un puerto de SALIDA (punto del lado derecho/entradas).");
+      flashError("Empieza desde un puerto de salida (lado derecho).");
       return;
     }
     drawingFrom = pid;
     info.el.classList.add("pending");
     overlay.classList.add("drawing-mode");
-    // Create temp path
     tempPath = document.createElementNS("http://www.w3.org/2000/svg","path");
     tempPath.setAttribute("class","cable-path temp");
     overlay.appendChild(tempPath);
-    cableHint.textContent = "Ahora haz clic en un puerto de ENTRADA para completar el cable. ESC para cancelar.";
+    cableHint.textContent = "Clic en un puerto de entrada para conectar. ESC cancela.";
   } else {
-    // Complete cable: target must be input port
     if (info.type !== "in") {
-      // Allow cancelling by clicking another output
       if (info.type === "out") {
         cancelDrawing();
-        onPortClick(pid); // restart from new port
+        onPortClick(pid);
         return;
       }
     }
-    // Validate: no self-loop
     if (pid === drawingFrom) { cancelDrawing(); return; }
-    // Auto-replace: if port already has a cable, silently delete it
     const existing = cables.find(c => c.toId === pid);
     if (existing) deleteCable(existing.id);
 
@@ -744,16 +784,14 @@ function onPortClick(pid) {
     const { pathEl, hitEl } = createCablePair(fromPos, toPos);
 
     const id = "cable-" + (++cableIdSeq);
-    // Click on the wide invisible hit area — easy to target
-    hitEl.addEventListener("click", e => { e.stopPropagation(); selectCable(id, e.clientX, e.clientY); });
+    hitEl.addEventListener("click", e => { e.stopPropagation(); deleteCable(id); updateCableHint(); });
 
     cables.push({ id, fromId: drawingFrom, toId: pid, pathEl, hitEl });
-
     portMap.get(drawingFrom).el.classList.add("connected");
     info.el.classList.add("connected");
 
     finishDrawing();
-    cableHint.textContent = "Cable creado. Crea mas o enciende el circuito.";
+    updateCableHint();
     if (circuitRunning) evaluateAndRender();
   }
 }
@@ -765,8 +803,7 @@ function cancelDrawing() {
   }
   if (tempPath) { tempPath.remove(); tempPath = null; }
   overlay.classList.remove("drawing-mode");
-  deselectCable();
-  cableHint.textContent = "Clic en punto de salida para comenzar un cable.";
+  updateCableHint();
 }
 
 function finishDrawing() {
@@ -778,71 +815,33 @@ function finishDrawing() {
 
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") cancelDrawing();
-  if ((e.key === "Delete" || e.key === "Backspace") && selectedCableId && !drawingFrom) {
-    deleteCable(selectedCableId);
-    deselectCable();
-  }
 });
-
-// Delete-cable button in tooltip
-deleteCableBtn.addEventListener("click", () => {
-  if (selectedCableId) { deleteCable(selectedCableId); deselectCable(); }
-});
-
-// Click outside cable tooltip = deselect
-document.addEventListener("click", e => {
-  if (selectedCableId && !e.target.closest("#cable-tooltip") && e.target.tagName !== "path") {
-    deselectCable();
-  }
-});
-
-function selectCable(id, clientX, clientY) {
-  if (selectedCableId === id) { deselectCable(); return; }
-  deselectCable();
-  selectedCableId = id;
-  const cable = cables.find(c => c.id === id);
-  if (cable) cable.pathEl.classList.add("cable-selected");
-  // Position tooltip near mouse
-  cableTooltip.style.left = (clientX + 12) + "px";
-  cableTooltip.style.top  = (clientY - 44) + "px";
-  cableTooltip.classList.remove("hidden");
-}
-
-function deselectCable() {
-  if (selectedCableId) {
-    const cable = cables.find(c => c.id === selectedCableId);
-    if (cable) cable.pathEl.classList.remove("cable-selected");
-  }
-  selectedCableId = null;
-  cableTooltip.classList.add("hidden");
-}
 
 // Mouse follow for temp cable
 overlay.addEventListener("mousemove", e => {
   if (!drawingFrom || !tempPath) return;
   const fromPos = getPortPos(portMap.get(drawingFrom).el);
   const wsRect  = workspace.getBoundingClientRect();
-  const mx = e.clientX - wsRect.left;
-  const my = e.clientY - wsRect.top;
+  const mx = (e.clientX - wsRect.left) / zoomLevel;
+  const my = (e.clientY - wsRect.top)  / zoomLevel;
   tempPath.setAttribute("d", bezier(fromPos.x, fromPos.y, mx, my));
 });
 
 overlay.addEventListener("click", e => {
-  // Clicking blank area cancels
   if (e.target === overlay) cancelDrawing();
 });
 
 function createCablePair(from, to) {
   const d = bezier(from.x, from.y, to.x, to.y);
-  // Visual thin line
   const pathEl = document.createElementNS("http://www.w3.org/2000/svg","path");
   pathEl.setAttribute("class","cable-path");
   pathEl.setAttribute("d", d);
   overlay.appendChild(pathEl);
-  // Invisible thick hit area on top for easy clicking
   const hitEl = document.createElementNS("http://www.w3.org/2000/svg","path");
   hitEl.setAttribute("class","cable-hit");
   hitEl.setAttribute("d", d);
+  hitEl.addEventListener("mouseenter", () => pathEl.classList.add("cable-hover"));
+  hitEl.addEventListener("mouseleave", () => pathEl.classList.remove("cable-hover"));
   overlay.appendChild(hitEl);
   return { pathEl, hitEl };
 }
@@ -856,8 +855,8 @@ function getPortPos(el) {
   const wsRect = workspace.getBoundingClientRect();
   const r = el.getBoundingClientRect();
   return {
-    x: r.left + r.width/2  - wsRect.left,
-    y: r.top  + r.height/2 - wsRect.top
+    x: (r.left + r.width/2  - wsRect.left) / zoomLevel,
+    y: (r.top  + r.height/2 - wsRect.top)  / zoomLevel
   };
 }
 
@@ -902,6 +901,79 @@ function refreshCablePaths() {
 }
 
 // =========================================================
+//  ZOOM
+// =========================================================
+function setZoom(level) {
+  zoomLevel = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, Math.round(level * 100) / 100));
+  workspace.style.transform = `scale(${zoomLevel})`;
+  workspace.style.transformOrigin = '0 0';
+  // Scale grid pattern on the container so it stays visible at any zoom
+  const gridSize = 28 * zoomLevel;
+  wsCont.style.backgroundSize = gridSize + 'px ' + gridSize + 'px';
+  zoomDisplay.textContent = Math.round(zoomLevel * 100) + '%';
+  resizeOverlay();
+  refreshCablePaths();
+}
+
+zoomInBtn.addEventListener("click", () => setZoom(zoomLevel + ZOOM_STEP));
+zoomOutBtn.addEventListener("click", () => setZoom(zoomLevel - ZOOM_STEP));
+zoomResetBtn.addEventListener("click", () => setZoom(1));
+
+// Ctrl + scroll wheel zoom
+wsCont.addEventListener("wheel", e => {
+  if (e.ctrlKey) {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+    setZoom(zoomLevel + delta);
+  }
+}, { passive: false });
+
+// Keyboard shortcuts: Ctrl+Plus / Ctrl+Minus
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey && (e.key === "+" || e.key === "=")) {
+    e.preventDefault(); setZoom(zoomLevel + ZOOM_STEP);
+  } else if (e.ctrlKey && e.key === "-") {
+    e.preventDefault(); setZoom(zoomLevel - ZOOM_STEP);
+  } else if (e.ctrlKey && e.key === "0") {
+    e.preventDefault(); setZoom(1);
+  }
+});
+
+// =========================================================
+//  CLICK-AND-DRAG PANNING
+// =========================================================
+{
+  let isPanning = false, panStartX = 0, panStartY = 0, scrollStartX = 0, scrollStartY = 0;
+
+  wsCont.addEventListener("mousedown", e => {
+    // Only pan on left-click directly on the container/workspace background
+    if (e.button !== 0) return;
+    // Skip if clicking on interactive elements (ports, buttons, inputs, selects, cards, etc.)
+    const tag = e.target.tagName.toLowerCase();
+    if (e.target.closest('.port, .conn-ff-card, .gate-card, button, select, input, .input-bit, .ff-drag-chip, .zoom-controls')) return;
+    if (tag === 'path' || tag === 'line') return; // cable overlay
+    isPanning = true;
+    panStartX = e.clientX; panStartY = e.clientY;
+    scrollStartX = wsCont.scrollLeft; scrollStartY = wsCont.scrollTop;
+    wsCont.classList.add('panning');
+    e.preventDefault();
+  });
+
+  window.addEventListener("mousemove", e => {
+    if (!isPanning) return;
+    wsCont.scrollLeft = scrollStartX - (e.clientX - panStartX);
+    wsCont.scrollTop  = scrollStartY - (e.clientY - panStartY);
+  });
+
+  window.addEventListener("mouseup", () => {
+    if (isPanning) {
+      isPanning = false;
+      wsCont.classList.remove('panning');
+    }
+  });
+}
+
+// =========================================================
 //  CIRCUIT ON/OFF
 // =========================================================
 circuitSwitch.addEventListener("change", function() { setCircuitState(this.checked); });
@@ -921,9 +993,7 @@ function setCircuitState(on) {
 // =========================================================
 clockBtn.addEventListener("click", () => {
   if (!circuitRunning) { alert("Enciende el circuito primero."); return; }
-  // Latch all FF gates (level gates + connector FFs)
-  niveles.forEach(n => n.tick());
-  connFFs.forEach(({ compuerta }) => { if (compuerta.isFF()) compuerta.latch(); });
+  // evaluateAndRender already auto-latches all FFs
   evaluateAndRender();
   // Visual flash
   clockBtn.classList.add("ticked");
@@ -952,15 +1022,13 @@ function evaluateAndRender() {
       const cB  = cables.find(c => c.toId === pfx + "-B");
       compuerta.A = cIn ? (portValues.get(cIn.fromId) ?? 0) : 0;
       compuerta.B = cB  ? (portValues.get(cB.fromId)  ?? 0) : 0;
+      // Auto-latch: FF evaluates immediately (no clock needed)
+      if (compuerta.isFF()) compuerta.latch();
       const outVal = compuerta.isFF() ? compuerta.Q : compuerta.calcular();
       portValues.set(pfx + "-out", outVal);
-      // Visual feedback on Q display
+      // Update real-time state panel
       const connEl = workspace.querySelector('.col-connector[data-conn="' + i + '"]');
-      const qValEl = connEl ? connEl.querySelector(".cff-q-val") : null;
-      if (qValEl) {
-        qValEl.textContent = "Q:" + outVal;
-        qValEl.classList.toggle("ff-on-lbl", outVal === 1);
-      }
+      if (connEl) updateFFStatePanel(connEl, compuerta);
     }
 
     nivel.compuertas.forEach((comp, g) => {
@@ -973,6 +1041,8 @@ function evaluateAndRender() {
       comp.A = cA ? (portValues.get(cA.fromId) ?? 0) : 0;
       comp.B = cB ? (portValues.get(cB.fromId) ?? 0) : 0;
 
+      // Auto-latch FFs in level gates too
+      if (comp.isFF()) comp.latch();
       const outVal = comp.isFF() ? comp.Q : comp.calcular();
       portValues.set(pidOut, outVal);
 
@@ -1012,11 +1082,11 @@ function resetDisplays() {
     if (isFF) b.classList.add("ff-off"); else b.classList.remove("ff-off");
   });
   cables.forEach(c => { c.pathEl.classList.remove("active"); c.pathEl.classList.remove("zero"); });
-  // Reset connector FF Q displays
-  connFFs.forEach(({tipo}, connN) => {
+  // Reset connector FF state panels & internal state
+  connFFs.forEach(({tipo, compuerta}, connN) => {
+    compuerta.estado = 0; compuerta.Q = 0; compuerta.A = 0; compuerta.B = 0;
     const connEl = workspace.querySelector('.col-connector[data-conn="' + connN + '"]');
-    const qValEl = connEl ? connEl.querySelector(".cff-q-val") : null;
-    if (qValEl) { qValEl.textContent = "Q:?"; qValEl.classList.remove("ff-on-lbl"); }
+    if (connEl) resetFFStatePanel(connEl);
   });
   // Reset gate SVGs using each gate's own type
   niveles.forEach(nivel => {
@@ -1042,7 +1112,6 @@ function clearAll(showPlaceholder = true) {
   connFFs.clear();
   cableIdSeq = 0; drawingFrom = null; tempPath = null;
   overlay.classList.remove("drawing-mode");
-  deselectCable();
 
   circuitSwitch.disabled   = true;
   circuitSwitch.checked    = false;
@@ -1050,6 +1119,7 @@ function clearAll(showPlaceholder = true) {
   clockBtn.classList.remove("ff-active", "ticked");
   clearBtn.classList.add("hidden");
   clearCablesBtn.classList.add("hidden");
+  autoConnectBtn.classList.add("hidden");
   circuitInfo.classList.add("hidden");
   levelInput.disabled      = false;
   generateBtn.disabled     = false;
@@ -1069,7 +1139,8 @@ function clearAll(showPlaceholder = true) {
 function updateStats() {
   const rows = niveles.map(n => {
     const types = [...new Set(n.compuertas.map(c => c.tipo.replace("FF","FF-")))].join(", ");
-    return "<div class='stats-row'><span>Nivel " + n.i + " &mdash; " + types + "</span>" +
+    const displayLevel = n.total - n.i + 1; // descending label
+    return "<div class='stats-row'><span>Nivel " + displayLevel + " &mdash; " + types + "</span>" +
            "<span class='stats-val'>" + n.gateCount + " c.</span></div>";
   }).join("");
   circuitStats.innerHTML = rows;
@@ -1083,14 +1154,126 @@ function updateClockActive() {
 
 function updateCableHint() {
   cableHint.textContent = cables.length > 0
-    ? cables.length + " cable(s) activo(s). Clic en un cable para borrarlo."
-    : "Clic en punto de salida (der.) para comenzar un cable.";
+    ? cables.length + " cable(s) activo(s)."
+    : "Clic en puerto de salida para cablear.";
 }
 
 function flashError(msg) {
   cableHint.classList.add("hint-error");
   cableHint.textContent = msg;
   setTimeout(() => { cableHint.classList.remove("hint-error"); updateCableHint(); }, 2500);
+}
+
+// =========================================================
+//  AUTO-CONNECT BY LEVELS
+// =========================================================
+function autoConnectByLevels() {
+  if (circuitRunning) { alert("Apaga el circuito primero."); return; }
+  if (niveles.length === 0) { alert("Genera el circuito primero."); return; }
+
+  // Clear all existing cables
+  cables.forEach(c => {
+    if (c.pathEl) c.pathEl.remove();
+    if (c.hitEl)  c.hitEl.remove();
+  });
+  cables = [];
+  portMap.forEach(p => { p.el.classList.remove("connected"); });
+
+  // Returns ordered output port IDs for a given column index (0 = input col, 1..N = levels)
+  function getOutputPorts(colIdx) {
+    if (colIdx === 0) {
+      const result = [];
+      const numIn = Math.pow(2, niveles.length);
+      for (let i = 0; i < numIn; i++) {
+        const pid = "in-" + i;
+        if (portMap.has(pid)) result.push(pid);
+      }
+      return result;
+    }
+    const nivel = niveles.find(n => n.i === colIdx);
+    if (!nivel) return [];
+    const result = [];
+    for (let g = 0; g < nivel.gateCount; g++) {
+      const pid = "g-l" + colIdx + "-g" + g + "-out";
+      if (portMap.has(pid)) result.push(pid);
+    }
+    return result;
+  }
+
+  // Returns ordered input port IDs for a given level column (1..N)
+  function getInputPorts(colIdx) {
+    const nivel = niveles.find(n => n.i === colIdx);
+    if (!nivel) return [];
+    const result = [];
+    for (let g = 0; g < nivel.gateCount; g++) {
+      const pidA = "g-l" + colIdx + "-g" + g + "-A";
+      if (portMap.has(pidA)) result.push(pidA);
+      const def = GATE_DEFS[nivel.compuertas[g].tipo] || GATE_DEFS.AND;
+      if (def.inB_Y != null) {
+        const pidB = "g-l" + colIdx + "-g" + g + "-B";
+        if (portMap.has(pidB)) result.push(pidB);
+      }
+    }
+    return result;
+  }
+
+  function addCable(fromPid, toPid) {
+    const fromInfo = portMap.get(fromPid);
+    const toInfo   = portMap.get(toPid);
+    if (!fromInfo || !toInfo) return;
+    const fromPos = getPortPos(fromInfo.el);
+    const toPos   = getPortPos(toInfo.el);
+    const { pathEl, hitEl } = createCablePair(fromPos, toPos);
+    const id = "cable-" + (++cableIdSeq);
+    hitEl.addEventListener("click", e => { e.stopPropagation(); deleteCable(id); updateCableHint(); });
+    cables.push({ id, fromId: fromPid, toId: toPid, pathEl, hitEl });
+    fromInfo.el.classList.add("connected");
+    toInfo.el.classList.add("connected");
+  }
+
+  const totalCols = niveles.length + 1; // col 0 (inputs) + col 1..N (levels)
+  for (let col = 1; col < totalCols; col++) {
+    const outs = getOutputPorts(col - 1);
+    const ins  = getInputPorts(col);
+    const count = Math.min(outs.length, ins.length);
+    for (let k = 0; k < count; k++) {
+      addCable(outs[k], ins[k]);
+    }
+  }
+
+  updateCableHint();
+  requestAnimationFrame(resizeOverlay);
+  if (circuitRunning) evaluateAndRender();
+}
+
+// =========================================================
+//  FF STATE PANEL HELPERS
+// =========================================================
+function updateFFStatePanel(connEl, compuerta) {
+  const sEl = connEl.querySelector('.cff-state-val[data-field="s"]');
+  const rEl = connEl.querySelector('.cff-state-val[data-field="r"]');
+  const qEl = connEl.querySelector('.cff-state-val[data-field="q"]');
+  if (sEl) {
+    sEl.textContent = compuerta.A;
+    sEl.classList.toggle("cff-sv-on", compuerta.A === 1);
+  }
+  if (rEl) {
+    rEl.textContent = compuerta.B;
+    rEl.classList.toggle("cff-sv-on", compuerta.B === 1);
+  }
+  if (qEl) {
+    qEl.textContent = compuerta.Q;
+    qEl.classList.toggle("ff-on-lbl", compuerta.Q === 1);
+  }
+}
+
+function resetFFStatePanel(connEl) {
+  const sEl = connEl.querySelector('.cff-state-val[data-field="s"]');
+  const rEl = connEl.querySelector('.cff-state-val[data-field="r"]');
+  const qEl = connEl.querySelector('.cff-state-val[data-field="q"]');
+  if (sEl) { sEl.textContent = "0"; sEl.classList.remove("cff-sv-on"); }
+  if (rEl) { rEl.textContent = "0"; rEl.classList.remove("cff-sv-on"); }
+  if (qEl) { qEl.textContent = "?"; qEl.classList.remove("ff-on-lbl"); }
 }
 
 // =========================================================
@@ -1112,6 +1295,48 @@ function initFFDragPalette() {
       draggedFFType = null;
     });
   });
+}
+
+// =========================================================
+//  THEME TOGGLE (Light / Dark)
+// =========================================================
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon   = document.getElementById("themeIcon");
+const themeLabel  = document.getElementById("themeLabel");
+
+// Restore saved preference
+(function initTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved === "light") applyTheme("light", false);
+})();
+
+themeToggle.addEventListener("click", () => {
+  const isLight = document.body.classList.contains("light-mode");
+  applyTheme(isLight ? "dark" : "light", true);
+});
+
+function applyTheme(mode, rerender) {
+  const isLight = mode === "light";
+  document.body.classList.toggle("light-mode", isLight);
+  themeIcon.innerHTML  = isLight ? "&#9728;" : "&#9790;";
+  themeLabel.textContent = isLight ? "Modo Oscuro" : "Modo Claro";
+  localStorage.setItem("theme", mode);
+
+  // Re-render gate SVGs so they pick up new CSS variable values
+  if (rerender) {
+    if (circuitRunning) {
+      evaluateAndRender();
+    } else {
+      // Re-render gates with default signal values
+      niveles.forEach(nivel => {
+        nivel.compuertas.forEach((comp, g) => {
+          const i = nivel.i;
+          const svgWrap = workspace.querySelector('.gate-svg-wrap[data-level="' + i + '"][data-gate="' + g + '"]');
+          if (svgWrap) svgWrap.innerHTML = renderGateSVG(comp.tipo, 0, 0, 0);
+        });
+      });
+    }
+  }
 }
 </script>
 </body>
