@@ -305,7 +305,7 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
     }
     return true;
   });
-  [pfx+"-in", pfx+"-B", pfx+"-out"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
+  [pfx+"-in", pfx+"-B", pfx+"-out", pfx+"-outn"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
 
   // Resolve Y position
   if (skipMapUpdate && connFFs.has(connN)) {
@@ -399,10 +399,16 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   qRow.innerHTML = '<span class="cff-state-label cff-state-label-q">Q:</span><span class="cff-state-val cff-q-val" data-field="q">?</span>';
   statePanel.appendChild(qRow);
 
+  // Q̄ output row
+  const qnRow = document.createElement("div");
+  qnRow.className = "cff-state-row cff-state-row-q";
+  qnRow.innerHTML = '<span class="cff-state-label cff-state-label-q">Q\u0305:</span><span class="cff-state-val cff-qn-val" data-field="qn">?</span>';
+  statePanel.appendChild(qnRow);
+
   body.appendChild(statePanel);
   card.appendChild(body);
 
-  // ── RIGHT: Q output pin
+  // ── RIGHT: Q and Q̄ output pins
   const rightCol = document.createElement("div");
   rightCol.className = "cff-right";
   const pinQ = document.createElement("div");
@@ -415,6 +421,19 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   pinQ.appendChild(qLbl);
   pinQ.appendChild(dotOut);
   rightCol.appendChild(pinQ);
+
+  // Q̄ output pin
+  const pinQn = document.createElement("div");
+  pinQn.className = "cff-pin cff-pin-right";
+  const qnLbl = document.createElement("span");
+  qnLbl.className = "cff-lbl cff-lbl-q";
+  qnLbl.textContent = "Q\u0305";
+  const dotOutN = makeDot(pfx + "-outn", "out", connN, -2, "outn");
+  dotOutN.title = ffType + " Q\u0305 salida negada";
+  pinQn.appendChild(qnLbl);
+  pinQn.appendChild(dotOutN);
+  rightCol.appendChild(pinQn);
+
   card.appendChild(rightCol);
 
   // ── Remove × button
@@ -464,7 +483,7 @@ function removeFFFromConnector(connN, connEl) {
     }
     return true;
   });
-  [pfx+"-in", pfx+"-B", pfx+"-out"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
+  [pfx+"-in", pfx+"-B", pfx+"-out", pfx+"-outn"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
   connFFs.delete(connN);
   connEl.classList.remove("filled");
   connEl.innerHTML = "";
@@ -686,6 +705,17 @@ function buildSingleGateCard(nivel, i, g, wrap) {
   dotOut.style.left = (GATE_W + 10 + 4) + "px";
   dotOut.style.top  = (GATE_H / 2 - 5) + "px";
   card.appendChild(dotOut);
+
+  // Q̄ output port (only for FF gates)
+  if (def.isFF) {
+    const pidOutN = "g-l" + i + "-g" + g + "-outn";
+    const dotOutN = makeDot(pidOutN, "out", i, g, "outn");
+    dotOutN.classList.add("port-abs");
+    dotOutN.style.left = (GATE_W + 10 + 4) + "px";
+    dotOutN.style.top  = (GATE_H - 8) + "px";
+    dotOutN.title = "Q\u0305 salida negada";
+    card.appendChild(dotOutN);
+  }
 
   // Output badge
   const badge = document.createElement("div");
@@ -1026,6 +1056,7 @@ function evaluateAndRender() {
       if (compuerta.isFF()) compuerta.latch();
       const outVal = compuerta.isFF() ? compuerta.Q : compuerta.calcular();
       portValues.set(pfx + "-out", outVal);
+      portValues.set(pfx + "-outn", outVal ? 0 : 1);
       // Update real-time state panel
       const connEl = workspace.querySelector('.col-connector[data-conn="' + i + '"]');
       if (connEl) updateFFStatePanel(connEl, compuerta);
@@ -1045,6 +1076,9 @@ function evaluateAndRender() {
       if (comp.isFF()) comp.latch();
       const outVal = comp.isFF() ? comp.Q : comp.calcular();
       portValues.set(pidOut, outVal);
+      if (comp.isFF()) {
+        portValues.set("g-l" + i + "-g" + g + "-outn", outVal ? 0 : 1);
+      }
 
       const svgWrap = workspace.querySelector('.gate-svg-wrap[data-level="' + i + '"][data-gate="' + g + '"]');
       if (svgWrap) svgWrap.innerHTML = renderGateSVG(comp.tipo, comp.A, comp.B, outVal);
@@ -1253,6 +1287,7 @@ function updateFFStatePanel(connEl, compuerta) {
   const sEl = connEl.querySelector('.cff-state-val[data-field="s"]');
   const rEl = connEl.querySelector('.cff-state-val[data-field="r"]');
   const qEl = connEl.querySelector('.cff-state-val[data-field="q"]');
+  const qnEl = connEl.querySelector('.cff-state-val[data-field="qn"]');
   if (sEl) {
     sEl.textContent = compuerta.A;
     sEl.classList.toggle("cff-sv-on", compuerta.A === 1);
@@ -1265,15 +1300,22 @@ function updateFFStatePanel(connEl, compuerta) {
     qEl.textContent = compuerta.Q;
     qEl.classList.toggle("ff-on-lbl", compuerta.Q === 1);
   }
+  if (qnEl) {
+    const qn = compuerta.Q ? 0 : 1;
+    qnEl.textContent = qn;
+    qnEl.classList.toggle("ff-on-lbl", qn === 1);
+  }
 }
 
 function resetFFStatePanel(connEl) {
   const sEl = connEl.querySelector('.cff-state-val[data-field="s"]');
   const rEl = connEl.querySelector('.cff-state-val[data-field="r"]');
   const qEl = connEl.querySelector('.cff-state-val[data-field="q"]');
+  const qnEl = connEl.querySelector('.cff-state-val[data-field="qn"]');
   if (sEl) { sEl.textContent = "0"; sEl.classList.remove("cff-sv-on"); }
   if (rEl) { rEl.textContent = "0"; rEl.classList.remove("cff-sv-on"); }
   if (qEl) { qEl.textContent = "?"; qEl.classList.remove("ff-on-lbl"); }
+  if (qnEl) { qnEl.textContent = "?"; qnEl.classList.remove("ff-on-lbl"); }
 }
 
 // =========================================================

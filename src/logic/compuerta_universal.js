@@ -55,7 +55,8 @@ const GATE_DEFS = {
            <text x="31" y="15" style="fill:var(--ff-label)" font-size="8" text-anchor="middle" font-family="monospace" font-weight="700">FF-SR</text>
            <text x="13" y="26" style="fill:var(--ff-input-s)" font-size="7" font-family="monospace">S</text>
            <text x="13" y="36" style="fill:var(--ff-input-r)" font-size="7" font-family="monospace">R</text>
-           <text x="48" y="14" style="fill:var(--ff-q-label)" font-size="7" text-anchor="end" font-family="monospace">Q</text>`,
+           <text x="48" y="14" style="fill:var(--ff-q-label)" font-size="7" text-anchor="end" font-family="monospace">Q</text>
+           <text x="48" y="38" style="fill:var(--ff-q-label)" font-size="7" text-anchor="end" font-family="monospace">Q&#x0305;</text>`,
     outX: 54, inA_Y: 23, inB_Y: 33,
     label: "", binary: true, isFF: true, ffType: "SR"
   },
