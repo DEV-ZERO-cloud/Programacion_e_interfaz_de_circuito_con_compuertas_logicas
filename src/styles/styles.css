@@ -275,11 +275,15 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
   position:relative;transition:background .35s;
   cursor:grab;
 }
+.workspace-container::-webkit-scrollbar{width:8px;height:8px}
+.workspace-container::-webkit-scrollbar-track{background:var(--scrollbar-track)}
+.workspace-container::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:4px}
+.workspace-container::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
 .workspace-container.panning{cursor:grabbing}
 .workspace{
   display:flex;flex-direction:row;align-items:flex-start;
   min-height:100%;min-width:max-content;
-  padding:24px 20px;gap:0;
+  padding:14px 12px;gap:0;
   position:relative;
   transition:background .35s;
 }
@@ -296,21 +300,21 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
 .level-col,.input-col{
   display:flex;flex-direction:column;
   align-items:center;
-  padding:8px 10px;
+  padding:5px 8px;
   flex-shrink:0;
   position:relative;
 }
 .input-col{
-  min-width:110px;background:var(--input-col-bg);
+  min-width:90px;background:var(--input-col-bg);
   border:1px dashed var(--input-col-border);border-radius:8px;
   margin-right:0;
   transition:background .35s,border-color .35s;
 }
 .level-col{
-  min-width:190px;
+  min-width:140px;
   border:2px solid var(--lc,var(--border-main));
   border-radius:8px;
-  margin-left:6px;
+  margin-left:4px;
   transition:border-color .35s;
 }
 /* Per-level border+title colors */
@@ -328,29 +332,73 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
 .col-connector{
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  align-self:stretch;
-  width:150px;flex-shrink:0;
-  margin:0 2px;
-  border:1px dashed var(--border-connector);
+  align-self:flex-start;
+  width:8px;flex-shrink:0;
+  margin:0 1px;
+  padding:0 14px;            /* invisible extra hit area (14px each side) */
+  box-sizing:content-box;    /* padding adds to visual hit zone, not width */
+  border:none;
   border-radius:7px;
   position:relative;
   cursor:default;
-  transition:border-color .18s,background .18s;
+  overflow:hidden;
+  transition:width .2s ease,border-color .18s,background .18s,padding .2s ease;
+}
+.col-connector.filled{
+  width:150px;
+  padding:0;
+  border:1px dashed var(--border-connector);
+  overflow:visible;
 }
 .col-connector::before{
-  content:"+ FF";
-  font-size:11px;color:var(--border-connector);
-  letter-spacing:.05em;user-select:none;
-  transition:color .15s;
-  font-family:"Courier New",monospace;
-  pointer-events:none;
+  content:"";
+  display:none;
 }
-.col-connector.drag-active{
-  border-color:var(--accent-purple);
+.col-connector.filled::before{
+  display:none;
+}
+.col-connector.drag-hover{
+  border:1px dashed var(--accent-purple);
   background:var(--ff-fill);
+  width:150px;
+  padding:0;
+  overflow:visible;
 }
-.col-connector.drag-active::before{color:var(--accent-purple)}
-.col-connector.filled::before{display:none}
+.col-connector.drag-hover::before{content:"+ FF";display:block;font-size:11px;color:var(--accent-purple);font-family:"Courier New",monospace;user-select:none;pointer-events:none}
+
+/* Author credits */
+.credits{
+  position:fixed;bottom:4px;left:8px;
+  font-size:9px;font-family:"Courier New",monospace;
+  color:var(--text-muted);opacity:.35;
+  pointer-events:none;user-select:none;
+  z-index:0;white-space:nowrap;
+  transition:color .35s;
+}
+
+/* Credits panel inside right sidebar */
+.credits-panel h4{
+  margin-bottom:6px;
+}
+.credits-panel ul{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:5px;
+}
+.credits-panel li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:6px;
+  font-size:11px;
+}
+.credits-name{
+  color:var(--text-primary);font-weight:600;
+  transition:color .35s;
+}
+.credits-code{
+  font-family:"Courier New",monospace;
+  font-size:10px;
+  color:var(--accent-green);
+  white-space:nowrap;
+  transition:color .35s;
+}
 
 /* Compact FF card inside a connector — base reset (detailed styles below) */
 .conn-ff-card{
@@ -388,11 +436,11 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
 .col-label{
   width:100%;text-align:center;
   background:var(--bg-header);border:1px solid var(--border-accent);border-radius:7px;
-  padding:6px 8px;margin-bottom:8px;
+  padding:5px 6px;margin-bottom:6px;
   transition:background .35s,border-color .35s;
 }
-.col-label .col-title{font-weight:700;font-size:12px;color:var(--text-primary);transition:color .35s}
-.col-label .col-formula{font-size:10px;color:var(--accent-green);font-family:"Courier New",monospace;margin-top:2px}
+.col-label .col-title{font-weight:700;font-size:11px;color:var(--text-primary);transition:color .35s}
+.col-label .col-formula{font-size:9px;color:var(--accent-green);font-family:"Courier New",monospace;margin-top:1px}
 .col-label select{
   margin-top:5px;width:100%;padding:3px 5px;
   background:var(--bg-input);color:var(--text-primary);
@@ -424,7 +472,7 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
 
 @keyframes pulse-port{0%,100%{box-shadow:0 0 6px rgba(250,204,21,.56)}50%{box-shadow:0 0 14px rgba(250,204,21,.8)}}
 
-.port-in-wrap{display:flex;flex-direction:column;gap:8px;align-items:center;margin-right:0}
+.port-in-wrap{display:flex;flex-direction:column;gap:5px;align-items:center;margin-right:0}
 .port-out-wrap{display:flex;align-items:center;margin-left:0}
 
 /* port labels */
@@ -435,16 +483,16 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
 
 /* OUTPUT BADGE */
 .output-badge{
-  width:24px;height:24px;border-radius:50%;
+  width:22px;height:22px;border-radius:50%;
   border:1px solid var(--border-accent);background:var(--bg-card);
-  color:var(--text-muted);font-size:9px;font-weight:700;
+  color:var(--text-muted);font-size:8px;font-weight:700;
   display:flex;align-items:center;justify-content:center;
-  margin-left:4px;transition:all .2s;flex-shrink:0;
+  margin-left:3px;transition:all .2s;flex-shrink:0;
 }
 .output-badge.on{background:var(--badge-on-bg);border-color:var(--badge-on-border);color:var(--badge-on-color);box-shadow:0 0 7px var(--badge-on-border)}
 .output-badge.off{background:var(--badge-off-bg);border-color:var(--badge-off-border);color:var(--badge-off-color);box-shadow:0 0 5px var(--badge-off-border)}
 /* FF output badge variants */
-.output-badge.ff-badge{width:32px;height:24px;border-radius:6px;font-size:8px;letter-spacing:.02em}
+.output-badge.ff-badge{width:30px;height:22px;border-radius:6px;font-size:7px;letter-spacing:.02em}
 .output-badge.ff-on{background:var(--badge-ff-on-bg);border-color:var(--badge-ff-on-border);color:var(--badge-ff-on-color);box-shadow:0 0 8px var(--badge-ff-on-border)}
 .output-badge.ff-off{background:var(--badge-ff-off-bg);border-color:var(--badge-ff-off-border);color:var(--badge-ff-off-color)}
 
@@ -453,14 +501,14 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
   display:flex;align-items:center;gap:0;
 }
 .input-bit-label{
-  font-size:9px;font-family:"Courier New",monospace;
-  color:var(--text-muted);width:20px;text-align:right;
-  margin-right:4px;flex-shrink:0;user-select:none;
+  font-size:8px;font-family:"Courier New",monospace;
+  color:var(--text-muted);width:18px;text-align:right;
+  margin-right:3px;flex-shrink:0;user-select:none;
 }
 .input-toggle{
-  width:34px;height:26px;border-radius:5px;
+  width:32px;height:24px;border-radius:5px;
   border:1px solid var(--border-accent);background:var(--bg-card);
-  color:var(--text-label);font-size:12px;font-weight:700;
+  color:var(--text-label);font-size:11px;font-weight:700;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;user-select:none;transition:all .15s;
   flex-shrink:0;
@@ -468,7 +516,7 @@ body{display:flex;height:100vh;overflow:hidden;background:var(--bg-body);color:v
 .input-toggle.on{background:var(--toggle-on-bg);border-color:var(--toggle-on-border);color:var(--toggle-on-color);box-shadow:0 0 5px var(--toggle-on-color)}
 /* Short stub wire between toggle and port dot */
 .input-wire-stub{
-  width:12px;height:2px;
+  width:10px;height:2px;
   background:var(--border-accent);flex-shrink:0;
   transition:background .2s;
 }
@@ -606,6 +654,7 @@ input:checked + .slider:before{transform:translateX(26px);background:var(--toggl
 
 /* Compact FF card inside a connector strip — schematic-style symbol */
 .conn-ff-card{
+  --ff-inner-scale:1;
   position:absolute;
   left:50%;
   transform:translate(-50%,-50%);
@@ -620,6 +669,11 @@ input:checked + .slider:before{transform:translateX(26px);background:var(--toggl
   box-shadow:0 2px 10px var(--ff-card-shadow);
   z-index:10;
   transition:background .35s,border-color .35s;
+}
+/* When the card is scaled down to fit small columns */
+.conn-ff-card.ff-scaled{
+  transform:translate(-50%,-50%) scale(var(--ff-inner-scale));
+  transform-origin:center center;
 }
 .conn-ff-card:active{cursor:grabbing}
 /* Left pin column */
@@ -810,16 +864,17 @@ input:checked + .slider:before{transform:translateX(26px);background:var(--toggl
    ZOOM CONTROLS
    ═══════════════════════════════════════════════════════════ */
 .zoom-controls{
-  position:absolute;bottom:14px;right:14px;
+  position:fixed;bottom:20px;right:290px;
   display:flex;align-items:center;gap:4px;
   background:var(--bg-card);
   border:1px solid var(--border-main);
   border-radius:8px;
   padding:4px 8px;
   box-shadow:0 2px 12px rgba(0,0,0,.35);
-  z-index:100;
+  z-index:1000;
   user-select:none;
   transition:background .35s,border-color .35s;
+  pointer-events:auto;
 }
 .zoom-btn{
   display:flex;align-items:center;justify-content:center;

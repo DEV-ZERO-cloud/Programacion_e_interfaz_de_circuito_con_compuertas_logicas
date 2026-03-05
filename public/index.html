@@ -47,13 +47,14 @@
     <svg id="cable-overlay"></svg>
     <div id="ws-placeholder">Elige los niveles y genera el circuito</div>
   </div>
-  <!-- Zoom controls -->
-  <div class="zoom-controls" id="zoomControls">
-    <button class="zoom-btn" id="zoomOutBtn" title="Alejar (Ctrl + -)">&#8722;</button>
-    <span class="zoom-display" id="zoomDisplay">100%</span>
-    <button class="zoom-btn" id="zoomInBtn" title="Acercar (Ctrl + +)">&#43;</button>
-    <button class="zoom-btn zoom-btn-reset" id="zoomResetBtn" title="Restablecer zoom">&#8634;</button>
-  </div>
+</div>
+
+<!-- Zoom controls (fixed position) -->
+<div class="zoom-controls" id="zoomControls">
+  <button class="zoom-btn" id="zoomOutBtn" title="Alejar (Ctrl + -)">&#8722;</button>
+  <span class="zoom-display" id="zoomDisplay">100%</span>
+  <button class="zoom-btn" id="zoomInBtn" title="Acercar (Ctrl + +)">&#43;</button>
+  <button class="zoom-btn zoom-btn-reset" id="zoomResetBtn" title="Restablecer zoom">&#8634;</button>
 </div>
 
 
@@ -104,6 +105,18 @@
   <div id="circuitInfo" class="hidden">
     <h4>Niveles</h4>
     <div id="circuitStats"></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="credits-panel">
+    <h4>Autores</h4>
+    <ul>
+      <li><span class="credits-name">Alejandro Steinman</span><span class="credits-code">T00077151</span></li>
+      <li><span class="credits-name">Andres Rubiano</span><span class="credits-code">T00077084</span></li>
+      <li><span class="credits-name">Jorge Benavides</span><span class="credits-code">T00077509</span></li>
+      <li><span class="credits-name">William Lozano</span><span class="credits-code">T00078475</span></li>
+    </ul>
   </div>
 
 </div>
@@ -208,7 +221,7 @@ function buildCircuit(N) {
   // Shared column height: all columns same px so pyramid centering works.
   // Formula: space-evenly with (maxGates+1) slots → each slot = areaH/(maxGates+1)
   // The gap between two adjacent gates = slot - GATE_H >= MIN_GAP_H
-  const MIN_GAP_H = 40;
+  const MIN_GAP_H = 26;
   const maxGates = Math.max(1, Math.pow(2, N - 1));
   areaH = (maxGates + 1) * (GATE_H + MIN_GAP_H);
 
@@ -228,6 +241,20 @@ function buildCircuit(N) {
   placeholder.style.display = "none";
   workspace.appendChild(frag);
 
+  // Align connector strips vertically with the gates area (skip the col-label header)
+  requestAnimationFrame(() => {
+    const firstLevel = workspace.querySelector(".level-col");
+    if (firstLevel) {
+      const gatesArea = firstLevel.querySelector(".gates-area");
+      if (gatesArea) {
+        const headerOffset = gatesArea.offsetTop; // distance from level-col top to gates-area top
+        workspace.querySelectorAll(".col-connector").forEach(c => {
+          c.style.marginTop = headerOffset + "px";
+        });
+      }
+    }
+  });
+
   // Init drag-and-drop on FF palette
   initFFDragPalette();
 
@@ -241,16 +268,35 @@ function buildCircuit(N) {
   updateStats();
   updateClockActive();
 
-  requestAnimationFrame(resizeOverlay);
+  requestAnimationFrame(() => {
+    resizeOverlay();
+    // Auto-adjust zoom to fit circuit
+    autoAdjustZoom();
+  });
 }
 
 // =========================================================
 //  CONNECTOR STRIP (FF drop zone between columns)
 // =========================================================
+// Continuously refresh cable paths during connector width transitions
+let _transitionRAF = null;
+function _scheduleTransitionRefresh() {
+  if (_transitionRAF) cancelAnimationFrame(_transitionRAF);
+  const start = performance.now();
+  const DURATION = 250; // slightly longer than CSS transition (200ms)
+  function tick(now) {
+    resizeOverlay(); refreshCablePaths();
+    if (now - start < DURATION) _transitionRAF = requestAnimationFrame(tick);
+    else _transitionRAF = null;
+  }
+  _transitionRAF = requestAnimationFrame(tick);
+}
+
 function buildConnector(connN) {
   const c = document.createElement("div");
   c.className = "col-connector";
   c.dataset.conn = connN;
+  c.style.height = areaH + "px";
 
   // Restore existing FF at its stored Y position
   if (connFFs.has(connN)) {
@@ -260,29 +306,73 @@ function buildConnector(connN) {
   c.addEventListener("dragover", e => {
     e.preventDefault();
     if (circuitRunning) return;
-    // Allow both new FF drops and repositioning
-    if (!connFFs.has(connN) || draggedConnN === connN) {
-      c.classList.add("drag-active");
+    // Allow: new FF drops, repositioning within same connector, or moving from another connector
+    if (!connFFs.has(connN) || draggedConnN !== null) {
+      c.classList.add("drag-hover");
     }
   });
-  c.addEventListener("dragleave", () => c.classList.remove("drag-active"));
+
+  // Use dragenter/dragleave counter to avoid flickering when hovering child elements
+  let _dragCounter = 0;
+  c.addEventListener("dragenter", e => {
+    _dragCounter++;
+    if (circuitRunning) return;
+    if (!connFFs.has(connN) || draggedConnN !== null) {
+      c.classList.add("drag-hover");
+      // Refresh cables continuously during the CSS transition
+      _scheduleTransitionRefresh();
+    }
+  });
+  c.addEventListener("dragleave", e => {
+    _dragCounter--;
+    if (_dragCounter <= 0) {
+      _dragCounter = 0;
+      c.classList.remove("drag-hover");
+      // Refresh cables continuously during the CSS transition
+      _scheduleTransitionRefresh();
+    }
+  });
+  // Listen for transitionend to do a final cable refresh after width animation
+  c.addEventListener("transitionend", e => {
+    if (e.propertyName === "width") {
+      resizeOverlay(); refreshCablePaths();
+    }
+  });
   c.addEventListener("drop", e => {
     e.preventDefault();
-    c.classList.remove("drag-active");
-    const rect   = c.getBoundingClientRect();
-    const rawY   = e.clientY - rect.top;
-    const topPx  = Math.min(Math.max(rawY, 20), c.offsetHeight - 20);
+    _dragCounter = 0;
+    c.classList.remove("drag-hover");
 
     // Block all drops while circuit is running
     if (circuitRunning) { alert("Apaga el circuito primero."); return; }
 
-    // Reposition existing FF on same connector
+    // Compute the drop Y in the connector's own (unscaled) coordinate space
+    const _rect = c.getBoundingClientRect();
+    const _colH = c.offsetHeight;
+    const _dropY = Math.min(Math.max(Math.round((e.clientY - _rect.top) / zoomLevel), 20), _colH - 20);
+
+    // For repositioning within the same connector, use the mouse Y
     if (draggedConnN === connN && connFFs.has(connN)) {
+      const topPx = _dropY;
       const ff = connFFs.get(connN);
       ff.topPx = topPx;
       const card = c.querySelector(".conn-ff-card");
       if (card) card.style.top = topPx + "px";
-      requestAnimationFrame(resizeOverlay);
+      requestAnimationFrame(() => { resizeOverlay(); refreshCablePaths(); });
+      return;
+    }
+    // Use the actual drop position (mouse Y) instead of always centering
+    const topPx = _dropY;
+
+    // Move FF from another connector to this one
+    if (draggedConnN !== null && draggedConnN !== connN && connFFs.has(draggedConnN)) {
+      const srcFF = connFFs.get(draggedConnN);
+      const srcType = srcFF.tipo;
+      // Remove from source connector
+      const srcConnEl = workspace.querySelector('.col-connector[data-conn="' + draggedConnN + '"]');
+      if (srcConnEl) removeFFFromConnector(draggedConnN, srcConnEl);
+      // Apply to this connector
+      applyFFToConnector(connN, srcType, c, false, topPx);
       return;
     }
 
@@ -307,11 +397,12 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   });
   [pfx+"-in", pfx+"-B", pfx+"-out", pfx+"-outn"].forEach(pid => { portMap.delete(pid); portValues.delete(pid); });
 
-  // Resolve Y position
+  // Resolve Y position — default to vertical center of column
+  const centerY = Math.round(areaH / 2);
   if (skipMapUpdate && connFFs.has(connN)) {
-    topPx = connFFs.get(connN).topPx ?? (connEl.offsetHeight / 2 || 150);
+    topPx = connFFs.get(connN).topPx ?? centerY;
   } else {
-    topPx = topPx ?? (connEl.offsetHeight / 2 || 150);
+    topPx = topPx ?? centerY;
     connFFs.set(connN, { tipo: ffType, compuerta: new Compuerta(ffType), topPx });
   }
 
@@ -319,6 +410,7 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   const oldCard = connEl.querySelector(".conn-ff-card");
   if (oldCard) oldCard.remove();
   connEl.classList.add("filled");
+  _scheduleTransitionRefresh(); // refresh cables during width transition
 
   const def = GATE_DEFS[ffType] || GATE_DEFS.FFD;
   const isTwoInput = def.inB_Y != null;
@@ -327,9 +419,16 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   const card = document.createElement("div");
   card.className = "conn-ff-card";
   card.style.top = topPx + "px";
-  // Card height: 3-pin (SR/JK) = 130px, 1-pin (D) = 100px (extra space for state panel)
-  const cardH = isTwoInput ? 130 : 100;
-  card.style.height = cardH + "px";
+  // Ideal card height: 3-pin (SR/JK) = 130px, 1-pin (D) = 100px
+  const idealH  = isTwoInput ? 130 : 100;
+  card.style.height = idealH + "px";
+  // Scale down the entire card if it would be too tall for the column
+  const maxH = Math.max(60, areaH * 0.55);
+  if (idealH > maxH) {
+    const scaleFactor = Math.max(0.45, maxH / idealH);
+    card.style.setProperty('--ff-inner-scale', scaleFactor.toFixed(3));
+    card.classList.add('ff-scaled');
+  }
   // Make the card itself draggable for repositioning (only when circuit is OFF)
   card.draggable = true;
   card.addEventListener("dragstart", e => {
@@ -342,6 +441,9 @@ function applyFFToConnector(connN, ffType, connEl, skipMapUpdate, topPx) {
   card.addEventListener("dragend", () => {
     draggedConnN = null;
     card.style.opacity = "";
+    // Clean up any remaining hover states
+    _hideAllConnectorHovers();
+    requestAnimationFrame(() => { resizeOverlay(); refreshCablePaths(); });
   });
 
   // ── LEFT: input pin column
@@ -487,6 +589,7 @@ function removeFFFromConnector(connN, connEl) {
   connFFs.delete(connN);
   connEl.classList.remove("filled");
   connEl.innerHTML = "";
+  _scheduleTransitionRefresh(); // refresh cables during width transition
   updateClockActive();
   updateStats();
   requestAnimationFrame(resizeOverlay);
@@ -945,6 +1048,43 @@ function setZoom(level) {
   refreshCablePaths();
 }
 
+function autoAdjustZoom() {
+  // Wait for DOM to be fully rendered
+  requestAnimationFrame(() => {
+    const wsWidth = workspace.scrollWidth;
+    const wsHeight = workspace.scrollHeight;
+    const containerWidth = wsCont.clientWidth;
+    const containerHeight = wsCont.clientHeight;
+    
+    // Calculate ideal zoom based on circuit size
+    // With tighter spacing, we can use more generous padding
+    const paddingFactor = Math.max(0.88, 0.96 - (niveles.length * 0.015));
+    
+    const zoomX = (containerWidth * paddingFactor) / wsWidth;
+    const zoomY = (containerHeight * paddingFactor) / wsHeight;
+    
+    // Use the smaller zoom to ensure everything fits
+    let optimalZoom = Math.min(zoomX, zoomY);
+    
+    // Clamp zoom to reasonable range (0.5 to 1.0) - raised minimum since layout is more compact
+    optimalZoom = Math.max(0.5, Math.min(optimalZoom, 1.0));
+    
+    // Only auto-zoom if circuit would be too large at 100%
+    if (optimalZoom < 0.98) {
+      setZoom(optimalZoom);
+      // Center the circuit after zooming
+      requestAnimationFrame(() => {
+        const scrollX = (wsWidth * optimalZoom - containerWidth) / 2;
+        const scrollY = (wsHeight * optimalZoom - containerHeight) / 2;
+        wsCont.scrollLeft = Math.max(0, scrollX);
+        wsCont.scrollTop = Math.max(0, scrollY);
+      });
+    } else {
+      setZoom(1); // Reset to 100% if it fits comfortably
+    }
+  });
+}
+
 zoomInBtn.addEventListener("click", () => setZoom(zoomLevel + ZOOM_STEP));
 zoomOutBtn.addEventListener("click", () => setZoom(zoomLevel - ZOOM_STEP));
 zoomResetBtn.addEventListener("click", () => setZoom(1));
@@ -1321,6 +1461,10 @@ function resetFFStatePanel(connEl) {
 // =========================================================
 //  DRAG-AND-DROP: FF palette → gate cards
 // =========================================================
+function _hideAllConnectorHovers() {
+  document.querySelectorAll('.col-connector').forEach(c => c.classList.remove('drag-hover'));
+}
+
 function initFFDragPalette() {
   document.querySelectorAll(".ff-drag-chip").forEach(chip => {
     // Remove old listeners by cloning
@@ -1335,6 +1479,9 @@ function initFFDragPalette() {
     fresh.addEventListener("dragend", () => {
       fresh.style.opacity = "";
       draggedFFType = null;
+      // Clean up any remaining hover states
+      _hideAllConnectorHovers();
+      requestAnimationFrame(() => { resizeOverlay(); refreshCablePaths(); });
     });
   });
 }
@@ -1381,5 +1528,8 @@ function applyTheme(mode, rerender) {
   }
 }
 </script>
+<footer class="credits">
+  &#169; Arquitectura del Computador &mdash; 2026
+</footer>
 </body>
 </html>
