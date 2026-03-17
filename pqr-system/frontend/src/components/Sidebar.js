@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Avatar, RoleBadge } from './Badges';
 import {
   LayoutDashboard, FilePlus, ClipboardList, LogOut,
-  Settings, ShieldCheck, Users, ChevronRight,
+  ShieldCheck, Users,
 } from 'lucide-react';
 
 const NAV_ITEMS = {
